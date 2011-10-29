@@ -21,6 +21,7 @@ private
 *.exe
 *.o
 *.so
+*.jar
 
 # Packages #
 ############
