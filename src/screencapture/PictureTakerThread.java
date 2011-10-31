@@ -36,7 +36,7 @@ public class PictureTakerThread extends Thread
                 //Toolkit.getDefaultToolkit().sync();
                 bufferedImage = robot.createScreenCapture(captureSize);
                 data.add(new PicNode(bufferedImage, counter + ".jpg"));
-                System.out.println("Picture: " + counter);
+                //System.out.println("Picture: " + counter);
                 counter++;
                 //this.yield();
             }
