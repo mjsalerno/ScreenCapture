@@ -26,6 +26,7 @@ public class PictureWriterThread extends Thread
         {
             while(running)
             {
+                System.out.println(data.isEmpty());
                 pn = data.poll();
                 if(pn != null)
                 {
@@ -33,11 +34,11 @@ public class PictureWriterThread extends Thread
                     pn = data.remove();
                     ImageIO.write(pn.getImage(), "jpg", new File(pn.getFilePath()));
                 }
-//                else
-//                {
-//                    // Sleep for alittle bit
-//                    this.yield();
-//                }
+                else
+                {
+                    // Sleep for alittle bit
+                    this.yield();
+                }
               }
         }
         catch(Exception ex){}
