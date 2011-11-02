@@ -45,9 +45,7 @@ public class PictureTakerThread extends Thread
                     // Sync Screen More For Linux/Mac
                     //Toolkit.getDefaultToolkit().sync();
                     bufferedImage = robot.createScreenCapture(captureSize);
-                    data.add(new PicNode(bufferedImage, counter + ".jpg"));
-                    //System.out.println("Picture: " + counter);
-                    counter++;
+                    data.add(new PicNode(bufferedImage, counter++ + ".jpg"));
                     //this.yield();
                 }
             }
