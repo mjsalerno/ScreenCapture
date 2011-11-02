@@ -7,14 +7,14 @@ public class MainThread extends Thread
     private boolean running;
     private PictureTakerThread pt;
     private PictureWriterThread pw;
-    private Timer timer;
+    private long time;
     
     public MainThread()
     {
         this.running = false;
         this.pt = new PictureTakerThread();
         this.pw = new PictureWriterThread();
-        timer = new Timer();
+        this.time = 10000000000L;
     }
     
     public MainThread(long time)
@@ -22,7 +22,7 @@ public class MainThread extends Thread
         this.running = false;
         this.pt = new PictureTakerThread();
         this.pw = new PictureWriterThread();
-        timer = new Timer(time);
+        this.time = time;
     }
     
     @Override
@@ -37,15 +37,12 @@ public class MainThread extends Thread
         // Start Loop
         while(running)
         {
-            while(timer.isTime()){
-                timer.went();
-                // Get Data from the picture Taker
-                data = pt.getData();
-                pw.addData(data);
-                data.clear();
-                // Sleep For awhile
-                //this.yield();
-            }
+            // Get Data from the picture Taker
+            data = pt.getData();
+            pw.addData(data);
+            data.clear();
+            // Sleep For awhile
+            this.yield();
         }
         // Kill child Threads
         pt.kill();
