@@ -26,7 +26,6 @@ public class PictureWriterThread extends Thread
         {
             while(running)
             {
-                System.out.println(data.isEmpty());
                 pn = data.poll();
                 if(pn != null)
                 {
@@ -51,9 +50,6 @@ public class PictureWriterThread extends Thread
     
     public synchronized void addData(ConcurrentLinkedQueue<PicNode> data)
     {
-        while(!data.isEmpty())
-        {
-            this.data.add(data.remove());
-        }
+        this.data.addAll(data);
     }
 }
