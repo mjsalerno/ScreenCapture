@@ -7,22 +7,19 @@ public class MainThread extends Thread
     private boolean running;
     private PictureTakerThread pt;
     private PictureWriterThread pw;
-    private long time;
     
     public MainThread()
     {
         this.running = false;
         this.pt = new PictureTakerThread();
         this.pw = new PictureWriterThread();
-        this.time = 10000000000L;
     }
     
     public MainThread(long time)
     {
         this.running = false;
-        this.pt = new PictureTakerThread();
+        this.pt = new PictureTakerThread(time);
         this.pw = new PictureWriterThread();
-        this.time = time;
     }
     
     @Override
