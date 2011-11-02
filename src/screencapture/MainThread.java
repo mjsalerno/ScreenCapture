@@ -37,12 +37,15 @@ public class MainThread extends Thread
         // Start Loop
         while(running)
         {
-            // Get Data from the picture Taker
-            data = pt.getData();
-            pw.addData(data);
-            data.clear();
-            // Sleep For awhile
-            this.yield();
+            while(timer.isTime()){
+                timer.went();
+                // Get Data from the picture Taker
+                data = pt.getData();
+                pw.addData(data);
+                data.clear();
+                // Sleep For awhile
+                //this.yield();
+            }
         }
         // Kill child Threads
         pt.kill();
