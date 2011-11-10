@@ -11,20 +11,12 @@ public class PictureTakerThread extends Thread
 {
     private ConcurrentLinkedQueue<PicNode> data; 
     private boolean running;
-    private Timer timer;
     
     
     public PictureTakerThread()
     {
         this.data = new ConcurrentLinkedQueue<PicNode>();
         this.running = false;
-        this.timer = new Timer();
-    }
-
-    public PictureTakerThread(long time) {
-        this.data = new ConcurrentLinkedQueue<PicNode>();
-        this.running = false;
-        this.timer = new Timer(time);
     }
     
     @Override
@@ -40,14 +32,13 @@ public class PictureTakerThread extends Thread
             System.out.println("PictureTaker has started.");
             while(running)
             {    
-                if(timer.isTime()){
-                    timer.went();
-                    // Sync Screen More For Linux/Mac
-                    //Toolkit.getDefaultToolkit().sync();
-                    bufferedImage = robot.createScreenCapture(captureSize);
-                    data.add(new PicNode(bufferedImage, counter++ + ".jpg"));
-                    //this.yield();
-                }
+                // Sync Screen More For Linux/Mac
+                //Toolkit.getDefaultToolkit().sync();
+                bufferedImage = robot.createScreenCapture(captureSize);
+                data.add(new PicNode(bufferedImage, counter + ".jpg"));
+                System.out.println("Picture: " + counter);
+                counter++;
+                //this.yield();
             }
         }
         catch(AWTException ex)
@@ -66,5 +57,5 @@ public class PictureTakerThread extends Thread
         ConcurrentLinkedQueue<PicNode> temp = data;
         data = new ConcurrentLinkedQueue<PicNode>();
         return temp;
-    }    
+    }
 }

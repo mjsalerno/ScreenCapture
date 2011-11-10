@@ -26,10 +26,8 @@ public class PictureWriterThread extends Thread
         {
             while(running)
             {
-                pn = data.poll();
-                if(pn != null)
+                if(data != null && !data.isEmpty())
                 {
-                    System.out.println("wrote");
                     pn = data.remove();
                     ImageIO.write(pn.getImage(), "jpg", new File(pn.getFilePath()));
                 }
@@ -38,7 +36,7 @@ public class PictureWriterThread extends Thread
                     // Sleep for alittle bit
                     this.yield();
                 }
-              }
+            }
         }
         catch(Exception ex){}
     }
@@ -50,6 +48,9 @@ public class PictureWriterThread extends Thread
     
     public synchronized void addData(ConcurrentLinkedQueue<PicNode> data)
     {
-        this.data.addAll(data);
+        while(!data.isEmpty())
+        {
+            this.data.add(data.remove());
+        }
     }
 }

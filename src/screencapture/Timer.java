@@ -15,7 +15,7 @@ public class Timer {
      * Defaults trigger to 10000.
      */
     public Timer(){
-        this.TRIGGER = 1000000000;
+        this.TRIGGER = 10000;
         this.startTime = System.nanoTime();
     }
     

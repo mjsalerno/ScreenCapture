@@ -15,13 +15,6 @@ public class MainThread extends Thread
         this.pw = new PictureWriterThread();
     }
     
-    public MainThread(long time)
-    {
-        this.running = false;
-        this.pt = new PictureTakerThread(time);
-        this.pw = new PictureWriterThread();
-    }
-    
     @Override
     public void run()
     {
