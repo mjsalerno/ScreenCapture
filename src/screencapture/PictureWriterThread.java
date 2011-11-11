@@ -53,4 +53,12 @@ public class PictureWriterThread extends Thread
             this.data.add(data.remove());
         }
     }
+    
+    /**
+     * @return If there is still data to be written return true. 
+     */
+    public synchronized boolean hasData()
+    {
+        return (this.data.size() > 0 ? true : false);
+    }
 }
