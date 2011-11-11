@@ -54,6 +54,12 @@ public class ScreenCaptureGui extends JFrame implements ActionListener
             else
             {
                 mt.kill();
+                record.setText("WRITING...");
+                record.setEnabled(false);                  
+                while(mt.isAlive()){     
+                    // do nothing while we wait for thread to end.
+                }
+                record.setEnabled(true);
                 this.setTitle(title);
                 record.setText("RECORD");
                 System.out.println("Thread ended.");
