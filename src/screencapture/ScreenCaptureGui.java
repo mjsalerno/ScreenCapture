@@ -2,8 +2,6 @@ package screencapture;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
@@ -58,12 +56,9 @@ public class ScreenCaptureGui extends JFrame implements ActionListener
                 mt.kill();
                 record.setText("WRITING...");
                 record.setEnabled(false);                  
-                try {
-                    mt.join();
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(ScreenCaptureGui.class.getName()).log(Level.SEVERE, null, ex);
+                while(mt.isAlive()){     
+                    // do nothing while we wait for thread to end.
                 }
-                
                 record.setEnabled(true);
                 this.setTitle(title);
                 record.setText("RECORD");
