@@ -75,7 +75,7 @@ public class PictureTakerThread extends Thread
     public synchronized ConcurrentLinkedQueue<PicNode> getData()
     {
         ConcurrentLinkedQueue<PicNode> temp = data;
-        data = new ConcurrentLinkedQueue<PicNode>();
+        data.clear();
         return temp;
     }
 }
