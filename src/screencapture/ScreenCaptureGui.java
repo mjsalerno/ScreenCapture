@@ -2,8 +2,6 @@ package screencapture;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
@@ -51,27 +49,33 @@ public class ScreenCaptureGui extends JFrame implements ActionListener
                 this.setTitle(title + " - Recording");
                 record.setText("STOP");
                 mt.start();
-                System.out.println("Starting the thread.");
+                // TODO: DEBIG prints out Starting MainThread
+                System.out.println("Starting the MainThread.");
             }
             else
             {
-                try 
+                record.setText("WRITING DATA");
+                record.setEnabled(false);
+                // TODO: DEBUG prints out that we are killing the main thread.
+                System.out.println("Killing Main Thread.");
+                // End the MainThread
+                mt.kill();
+                try
                 {
-                    record.setEnabled(false);
-                    record.setText("WRITING");
-                    // End Parent thread
-                    mt.kill();
-                    // Join the thread.
+                    // TODO: DEBUG prints out that the main thread has been joined.
+                    System.out.println("Main Thread Joined.");
                     mt.join();
-                    // Once the join is completed set everything back to normal.
-                    record.setEnabled(true);
-                    this.setTitle(title);
-                    record.setText("RECORD");
-                } 
-                catch (InterruptedException ex) 
-                {
-                    System.out.println("Exception thrown.");
                 }
+                catch(Exception ex)
+                { 
+                    System.out.println("Main Thread Join Failed.");
+                }
+                // TODO: DEBUG prints out when control from the thread join is handed back to the gui.
+                System.out.println("GUI MT DONE");
+                // Once the join is completed set everything back to normal.
+                record.setEnabled(true);
+                this.setTitle(title);
+                record.setText("RECORD");
             }
         }
     }

@@ -1,8 +1,6 @@
 package screencapture;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class MainThread extends Thread 
 {
@@ -46,20 +44,20 @@ public class MainThread extends Thread
         
         try 
         {
-            // Kill Writer Thread
+            // Kill the PictureTakerThread
             pt.kill();
-            // Join thtread
+            // Join the PictureTakerThread
             pt.join();
             // Get final data from picture taker
             data = pt.getData();
             // Give Final Data to picture writer
             pw.addData(data);
-            // Join the Picture writer thread
-            while(pw.hasData()) {this.yield();} // Wait or this thread to finish its work.
-            // Once it is done working kill the thread.
+            // Kill the PictureWriterThread
             pw.kill();
-            // Join the thread.
+            // Join the PictureWriterThread.
             pw.join();
+            // TODO: DEBUG prints out main thread is done.
+            System.out.println("Main Thread is done.");
         } 
         catch (InterruptedException ex) 
         { 

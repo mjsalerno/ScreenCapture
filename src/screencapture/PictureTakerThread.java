@@ -12,34 +12,48 @@ public class PictureTakerThread extends Thread
     private ConcurrentLinkedQueue<PicNode> data; 
     private boolean running;
     
-    
+    /**
+     * Default Constructor
+     * Creates a new ConcurrentLinkedQueue to hold data taken from the PictureTakerThread.
+     * Sets running to true; This makes our loop in run tick.
+     */
     public PictureTakerThread()
     {
         this.data = new ConcurrentLinkedQueue<PicNode>();
-        this.running = false;
+        this.running = true;
     }
     
+    /**
+     * Takes pictures of the desktop screen.
+     */
     @Override
     public void run()
     {
         try 
         {
+            // TODO: DEBUG prints out that the PictureTakerThread has started.
+            System.out.println("PictureTaker has started.");
             Robot robot = new Robot();
             Rectangle captureSize = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
             BufferedImage bufferedImage;
-            running = true;
             int counter = 0;
-            System.out.println("PictureTaker has started.");
             while(running)
             {    
                 // Sync Screen More For Linux/Mac
-                //Toolkit.getDefaultToolkit().sync();
+                Toolkit.getDefaultToolkit().sync();
+                // Create a buffered image of the screen.
                 bufferedImage = robot.createScreenCapture(captureSize);
+                // Add the image data to the ConcurrentLinkedQueue
                 data.add(new PicNode(bufferedImage, counter + ".jpg"));
-                System.out.println("Picture: " + counter);
-                counter++;
-                //this.yield();
+                // TODO: DEBUG: print out the current image count
+                //System.out.println("Picture: " + counter);
+                // Increase the image counter.
+                counter++; 
+                // Sleep for abit
+                this.yield();
             }
+            // TODO: DEBUG prints out that the PictureTakerThread has ended.
+            System.out.println("PictureTakerThread has ended.");
         }
         catch(AWTException ex)
         { 
@@ -47,11 +61,17 @@ public class PictureTakerThread extends Thread
         }    
     }
     
+    /**
+     * Ends the main loop within the run method.
+     */
     public synchronized void kill()
     {
         this.running = false;
     }
     
+    /**
+     * @return Returns a ConcurrentLinkedQueue containing the most recent images the thread has taken. 
+     */
     public synchronized ConcurrentLinkedQueue<PicNode> getData()
     {
         ConcurrentLinkedQueue<PicNode> temp = data;
