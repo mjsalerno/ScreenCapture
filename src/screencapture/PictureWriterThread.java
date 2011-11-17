@@ -35,8 +35,6 @@ public class PictureWriterThread extends Thread
         {
             // Write out a file
             write(pn);
-            // Sleep for alittle bit
-            //this.yield();
         }
         // Write out everything left in the buffer.
         while(!data.isEmpty())
@@ -59,6 +57,10 @@ public class PictureWriterThread extends Thread
             {
                 pn = data.remove();
                 ImageIO.write(pn.getImage(), "jpg", new File(pn.getFilePath()));
+            }
+            else
+            {
+                this.yield();
             }
         }
         catch(Exception ex){}
