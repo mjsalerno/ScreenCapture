@@ -38,8 +38,11 @@ public class MainThread extends Thread
                 // Reset the timer
                 timer.went();
             }
-            // Sleep For awhile
-            this.yield();
+            else
+            {
+                // Sleep For awhile
+                this.yield();
+            }
         }
         
         try 

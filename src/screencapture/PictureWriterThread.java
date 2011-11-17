@@ -36,13 +36,12 @@ public class PictureWriterThread extends Thread
             // Write out a file
             write(pn);
             // Sleep for alittle bit
-            this.yield();
+            //this.yield();
         }
         // Write out everything left in the buffer.
         while(!data.isEmpty())
         {
             write(pn);
-            this.yield();
         }
         // TODO: DEBUG prints out that the PictureWriterThread has ended.
         System.out.println("PictureWriterThread has ended.");
