@@ -46,11 +46,11 @@ public class PictureTakerThread extends Thread
                 // Add the image data to the ConcurrentLinkedQueue
                 data.add(new PicNode(bufferedImage, counter + ".jpg"));
                 // TODO: DEBUG: print out the current image count
-                //System.out.println("Picture: " + counter);
+                // System.out.println("Picture: " + counter);
                 // Increase the image counter.
                 counter++; 
                 // Sleep for abit
-                this.yield();
+                //this.yield();
             }
             // TODO: DEBUG prints out that the PictureTakerThread has ended.
             System.out.println("PictureTakerThread has ended.");
