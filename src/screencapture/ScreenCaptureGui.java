@@ -38,7 +38,7 @@ public class ScreenCaptureGui extends JFrame implements ActionListener
      * @param e 
      */
     @Override
-    public void actionPerformed(ActionEvent e)
+    public synchronized void actionPerformed(ActionEvent e)
     {
         // If the record button is pressed
         if(e.getSource() == record)
@@ -54,10 +54,10 @@ public class ScreenCaptureGui extends JFrame implements ActionListener
             }
             else
             {
-                System.out.println("START: Changing Button Text and Properties");
                 record.setText("WRITING DATA");
                 record.setEnabled(false);
-                System.out.println("DONE: Changing Button Text and Properties");
+                this.setTitle(title + " - WRITING DATA");
+                this.paint(this.getGraphics());
                 
                 // TODO: DEBUG prints out that we are killing the main thread.
                 System.out.println("Killing Main Thread.");
