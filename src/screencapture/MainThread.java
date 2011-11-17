@@ -37,6 +37,8 @@ public class MainThread extends Thread
                 data.clear();
                 // Reset the timer
                 timer.went();
+                // Force Garbage Collect
+                System.gc();
             }
             else
             {

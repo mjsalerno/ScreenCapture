@@ -46,7 +46,7 @@ public class PictureTakerThread extends Thread
                 // Add the image data to the ConcurrentLinkedQueue
                 data.add(new PicNode(bufferedImage, counter + ".jpg"));
                 // TODO: DEBUG: print out the current image count
-                // System.out.println("Picture: " + counter);
+                //System.out.println("Picture: " + counter);
                 // Increase the image counter.
                 counter++; 
                 // Sleep for abit
@@ -74,7 +74,7 @@ public class PictureTakerThread extends Thread
      */
     public synchronized ConcurrentLinkedQueue<PicNode> getData()
     {
-        ConcurrentLinkedQueue<PicNode> temp = data;
+        ConcurrentLinkedQueue<PicNode> temp = new ConcurrentLinkedQueue<PicNode>(data);
         data.clear();
         return temp;
     }
