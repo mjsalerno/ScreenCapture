@@ -17,9 +17,9 @@ public class PictureTakerThread extends Thread
      * Creates a new ConcurrentLinkedQueue to hold data taken from the PictureTakerThread.
      * Sets running to true; This makes our loop in run tick.
      */
-    public PictureTakerThread()
+    public PictureTakerThread(ConcurrentLinkedQueue<PicNode> data)
     {
-        this.data = new ConcurrentLinkedQueue<PicNode>();
+        this.data = data;
         this.running = true;
     }
     
@@ -50,7 +50,7 @@ public class PictureTakerThread extends Thread
                 // Increase the image counter.
                 counter++; 
                 // Sleep for a bit
-                //this.yield();
+                this.yield();
             }
             // TODO: DEBUG prints out that the PictureTakerThread has ended.
             System.out.println("PictureTakerThread has ended.");
@@ -67,15 +67,5 @@ public class PictureTakerThread extends Thread
     public synchronized void kill()
     {
         this.running = false;
-    }
-    
-    /**
-     * @return Returns a ConcurrentLinkedQueue containing the most recent images the thread has taken. 
-     */
-    public synchronized ConcurrentLinkedQueue<PicNode> getData()
-    {
-        ConcurrentLinkedQueue<PicNode> temp = new ConcurrentLinkedQueue<PicNode>(data);
-        data.clear();
-        return temp;
     }
 }
