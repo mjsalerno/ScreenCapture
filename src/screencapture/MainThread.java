@@ -10,7 +10,7 @@ public class MainThread extends Thread
     public MainThread()
     {
         this.running = true;
-        this.timer = new Timer(1, "seconds"); // sets the timer to one second per update
+        this.timer = new Timer(5, "seconds"); // sets the timer to one second per update
     }
     
     @Override
