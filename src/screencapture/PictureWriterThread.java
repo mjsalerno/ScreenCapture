@@ -14,9 +14,9 @@ public class PictureWriterThread extends Thread
      * Creates a new ConcurrentLinkedQueue to hold data taken from the PictureTakerThread.
      * Sets running to true; This makes our loop in run tick.
      */
-    public PictureWriterThread()
+    public PictureWriterThread(ConcurrentLinkedQueue<PicNode> data)
     {
-        data = new ConcurrentLinkedQueue<PicNode>();
+        this.data = data;
         this.running = true;
     }
     
@@ -35,6 +35,8 @@ public class PictureWriterThread extends Thread
         {
             // Write out a file
             write(pn);
+            // Yield the thread
+            this.yield();
         }
         // Write out everything left in the buffer.
         while(!data.isEmpty())
@@ -58,10 +60,6 @@ public class PictureWriterThread extends Thread
                 pn = data.remove();
                 ImageIO.write(pn.getImage(), "jpg", new File(pn.getFilePath()));
             }
-            else
-            {
-                this.yield();
-            }
         }
         catch(Exception ex){}
     }
@@ -72,15 +70,6 @@ public class PictureWriterThread extends Thread
     public synchronized void kill()
     {
         this.running = false;
-    }
-    
-    /**
-     * Adds data from the PictureTakerThread to this thread.
-     * @param data ConcurrentLinkedQueue containing the most recent pictures taken by the PictureTakerThread.
-     */
-    public synchronized void addData(ConcurrentLinkedQueue<PicNode> data)
-    {
-        this.data.addAll(data);
     }
     
     /**
