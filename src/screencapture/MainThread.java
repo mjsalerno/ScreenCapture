@@ -14,13 +14,13 @@ public class MainThread extends Thread
     }
     
     @Override
-    public void run()
+    public synchronized void run()
     {
         // Create Location to hold data
         ConcurrentLinkedQueue<PicNode> data;
         // Create Threads
-        PictureTakerThread pt = new PictureTakerThread();
-        PictureWriterThread pw = new PictureWriterThread();
+        PictureTakerThread pt = new PictureTakerThread(data);
+        PictureWriterThread pw = new PictureWriterThread(data);
         // Start Child Threads
         pt.start();
         pw.start();
