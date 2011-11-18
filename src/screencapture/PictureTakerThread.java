@@ -49,7 +49,7 @@ public class PictureTakerThread extends Thread
                 //System.out.println("Picture: " + counter);
                 // Increase the image counter.
                 counter++; 
-                // Sleep for abit
+                // Sleep for a bit
                 //this.yield();
             }
             // TODO: DEBUG prints out that the PictureTakerThread has ended.
