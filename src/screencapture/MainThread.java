@@ -17,7 +17,7 @@ public class MainThread extends Thread
     public synchronized void run()
     {
         // Create Location to hold data
-        ConcurrentLinkedQueue<PicNode> data;
+        ConcurrentLinkedQueue<PicNode> data = new ConcurrentLinkedQueue<PicNode>();
         // Create Threads
         PictureTakerThread pt = new PictureTakerThread(data);
         PictureWriterThread pw = new PictureWriterThread(data);
@@ -30,10 +30,6 @@ public class MainThread extends Thread
         {
             if(timer.isTime())
             {
-                // Get Data from the picture Taker
-                data = pt.getData();
-                pw.addData(data);
-                data.clear();
                 // Reset the timer
                 timer.went();
                 // Force Garbage Collect
@@ -52,10 +48,6 @@ public class MainThread extends Thread
             pt.kill();
             // Join the PictureTakerThread
             pt.join();
-            // Get final data from picture taker
-            data = pt.getData();
-            // Give Final Data to picture writer
-            pw.addData(data);
             // Kill the PictureWriterThread
             pw.kill();
             // Join the PictureWriterThread.
