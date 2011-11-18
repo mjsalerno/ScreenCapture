@@ -43,7 +43,7 @@ public class ScreenCaptureGui extends JFrame implements ActionListener
         // If the record button is pressed
         if(e.getSource() == record)
         {
-            if(mt == null || !mt.isRunning())
+            if(!mt.isRunning())
             {
                 mt = new MainThread();
                 this.setTitle(title + " - Recording");

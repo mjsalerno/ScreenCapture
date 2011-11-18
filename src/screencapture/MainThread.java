@@ -14,7 +14,7 @@ public class MainThread extends Thread
     }
     
     @Override
-    public synchronized void run()
+    public void run()
     {
         // Create Location to hold data
         ConcurrentLinkedQueue<PicNode> data = new ConcurrentLinkedQueue<PicNode>();
