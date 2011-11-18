@@ -9,7 +9,7 @@ public class MainThread extends Thread
     
     public MainThread()
     {
-        this.running = true;
+        this.running = false;
         this.timer = new Timer(5, "seconds"); // sets the timer to one second per update
     }
     
@@ -24,7 +24,8 @@ public class MainThread extends Thread
         // Start Child Threads
         pt.start();
         pw.start();
-        
+        // Set the running to true
+        this.running = true;
         // Start Loop
         while(running)
         {
