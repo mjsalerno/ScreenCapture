@@ -9,7 +9,7 @@ import javax.imageio.ImageIO;
  *
  * @author JJ_2011
  */
-public class PicNode implements Serializable
+public class PicNode
 {    
     private BufferedImage img;
     private String fileName;
