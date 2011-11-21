@@ -41,19 +41,19 @@ public class PictureWriterThread extends Thread
             // Binary Stream Data
             File file = new File("Test.dat");
             DataOutputStream out = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(file)));
-            // Debug Timing
+            // Debug
             long before = 0;
             while(running)
             {
-                long before = System.currentTimeMillis();
-                writeBinary(out, pn);
-                System.out.println("Write DT: " + (System.currentTimeMillis() - before));
+                //writeBinary(out, pn, before);
+                write(pn, before);
                 this.yield();
             }
             // Write out everything left in the buffer.
             while(!data.isEmpty())
             {
-                writeBinary(out, pn);
+                //writeBinary(out, pn, before);
+                write(pn, before);
                 this.yield();
             }
             // Close the Stream
@@ -71,17 +71,16 @@ public class PictureWriterThread extends Thread
      * Creates a .jpg image of the next file in the ConcurrentLinkedQueue data.
      * @param pn A PictureNode used to hold the data removed from the ConcurrentLinkedQueue.
      */
-    private synchronized void write(PicNode pn)
+    private synchronized void write(PicNode pn, long before) throws IOException
     {
-        try
+        if(data != null && !data.isEmpty())
         {
-            if(data != null && !data.isEmpty())
-            {
-                pn = data.remove();
-                ImageIO.write(pn.getImage(), "jpg", new File(pn.getFilePath()));
-            }
+            // Debug Timing
+            before = System.currentTimeMillis();
+            pn = data.remove();
+            ImageIO.write(pn.getImage(), "jpg", new File(pn.getFilePath()));
+            System.out.println("Write DT: " + (System.currentTimeMillis() - before));
         }
-        catch(Exception ex){}
     }
     
     /**
@@ -89,14 +88,17 @@ public class PictureWriterThread extends Thread
      * @param out DataOutputStream to binary file.
      * @param pn PicNode containing the next image on the Queue.
      */
-    private synchronized void writeBinary(DataOutputStream out, PicNode pn) throws IOException
+    private synchronized void writeBinary(DataOutputStream out, PicNode pn, long before) throws IOException
     {
         // New Code writes pictures to Binary file to be processed later.
         if(data != null && !data.isEmpty())
         {
             pn = data.remove();
+            // Debug Timing
+            before = System.currentTimeMillis();    
             out.writeUTF(pn.getFilePath());
             out.write(pn.getImageBytes());
+            System.out.println("Write DT: " + (System.currentTimeMillis() - before));
         }
     }
     
