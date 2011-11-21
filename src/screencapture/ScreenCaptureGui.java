@@ -20,7 +20,7 @@ public class ScreenCaptureGui extends JFrame implements ActionListener
     // Buttons
     private JButton record;
     // label
-    private JLabel label;
+    protected JLabel lblQueueSize;
     
     /**
      * Complete Constructor
@@ -35,12 +35,12 @@ public class ScreenCaptureGui extends JFrame implements ActionListener
         this.setResizable(false);
         this.mainPanel = new JPanel();
         this.record = new JButton("RECORD");
-        this.label = new JLabel("queue size");
+        this.lblQueueSize = new JLabel("Queue Size : 0");
         this.record.addActionListener(this);
-        this.mainPanel.add(label);
+        this.mainPanel.add(lblQueueSize);
         this.mainPanel.add(record);
         this.add(mainPanel);
-        this.mt = new MainThread();
+        this.mt = new MainThread(this);
     }
     
     /**
@@ -55,10 +55,9 @@ public class ScreenCaptureGui extends JFrame implements ActionListener
         {
             if(!mt.isRunning())
             {
-                mt = new MainThread();
+                mt = new MainThread(this);
                 this.setTitle(title + " - Recording");
                 record.setText("STOP");
-                mt.setQCounter(label);
                 mt.start();
                 // TODO: DEBUG prints out Starting MainThread
                 System.out.println("Starting the MainThread.");
@@ -90,6 +89,8 @@ public class ScreenCaptureGui extends JFrame implements ActionListener
                 record.setEnabled(true);
                 this.setTitle(title);
                 record.setText("RECORD");
+                // TODO: DEBUG resets queue size label.
+                this.lblQueueSize.setText("Queue Size : " + 0);
             }
         }
     }
