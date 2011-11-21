@@ -6,6 +6,8 @@ public class MainThread extends Thread
 {
     private boolean running;
     private Timer timer;
+    // Create Location to hold data
+    private ConcurrentLinkedQueue<PicNode> data = new ConcurrentLinkedQueue<PicNode>();
     
     public MainThread()
     {
@@ -16,8 +18,6 @@ public class MainThread extends Thread
     @Override
     public void run()
     {
-        // Create Location to hold data
-        ConcurrentLinkedQueue<PicNode> data = new ConcurrentLinkedQueue<PicNode>();
         // Create Threads
         PictureTakerThread pt = new PictureTakerThread(data);
         PictureWriterThread pw = new PictureWriterThread(data);
@@ -76,5 +76,13 @@ public class MainThread extends Thread
     public synchronized void kill()
     {
         this.running = false;
+    }
+    
+    /**
+     * @return Returns the current Size of the Queue. 
+     */
+    public synchronized int getQueueSize()
+    {
+        return this.data.size();
     }
 }
