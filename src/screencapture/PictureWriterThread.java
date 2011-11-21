@@ -91,7 +91,8 @@ public class PictureWriterThread extends Thread
         if(data != null && !data.isEmpty())
         {
             pn = data.remove();
-            out.write(pn.getBytes());
+            out.writeUTF(pn.getFilePath());
+            out.write(pn.getImageBytes());
         }
     }
     
