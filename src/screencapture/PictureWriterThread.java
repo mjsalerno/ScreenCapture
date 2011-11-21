@@ -41,9 +41,13 @@ public class PictureWriterThread extends Thread
             // Binary Stream Data
             File file = new File("Test.dat");
             DataOutputStream out = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(file)));
+            // Debug Timing
+            long before = 0;
             while(running)
             {
+                long before = System.currentTimeMillis();
                 writeBinary(out, pn);
+                System.out.println("Write DT: " + (System.currentTimeMillis() - before));
                 this.yield();
             }
             // Write out everything left in the buffer.
