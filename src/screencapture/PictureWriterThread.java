@@ -1,6 +1,10 @@
 package screencapture;
 
+import java.io.BufferedOutputStream;
+import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import javax.imageio.ImageIO;
 
@@ -31,21 +35,32 @@ public class PictureWriterThread extends Thread
         System.out.println("PictureWriter has started.");
         // Sets a node that is going to be reused many times to null.
         PicNode pn = null;
-        while(running)
+        
+        try
         {
-            // Write out a file
-            write(pn);
-            // Yield the thread
-            this.yield();
+            // Binary Stream Data
+            File file = new File("Test.dat");
+            DataOutputStream out = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(file)));
+            while(running)
+            {
+                writeBinary(out, pn);
+                this.yield();
+            }
+            // Write out everything left in the buffer.
+            while(!data.isEmpty())
+            {
+                writeBinary(out, pn);
+                this.yield();
+            }
+            // Close the Stream
+            out.close();
+            // TODO: DEBUG prints out that the PictureWriterThread has ended.
+            System.out.println("PictureWriterThread has ended.");
         }
-        // Write out everything left in the buffer.
-        while(!data.isEmpty())
-        {
-            write(pn);
-            this.yield();
+        catch(Exception ex)
+        { 
+            System.out.println("Unable to create Binary stream.");
         }
-        // TODO: DEBUG prints out that the PictureWriterThread has ended.
-        System.out.println("PictureWriterThread has ended.");
     }
     
     /**
@@ -63,6 +78,21 @@ public class PictureWriterThread extends Thread
             }
         }
         catch(Exception ex){}
+    }
+    
+    /**
+     * Writes PicNode object out to a binary file to be manipulated later.
+     * @param out DataOutputStream to binary file.
+     * @param pn PicNode containing the next image on the Queue.
+     */
+    private synchronized void writeBinary(DataOutputStream out, PicNode pn) throws IOException
+    {
+        // New Code writes pictures to Binary file to be processed later.
+        if(data != null && !data.isEmpty())
+        {
+            pn = data.remove();
+            out.write(pn.getBytes());
+        }
     }
     
     /**
