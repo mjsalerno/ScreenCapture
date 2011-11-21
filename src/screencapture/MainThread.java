@@ -1,7 +1,6 @@
 package screencapture;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
-import javax.swing.JLabel;
 
 public class MainThread extends Thread 
 {
@@ -9,14 +8,15 @@ public class MainThread extends Thread
     private Timer timer;
     // Create Location to hold data
     private ConcurrentLinkedQueue<PicNode> data;
-    private JLabel qCounter;
+    // Gui
+    private ScreenCaptureGui gui;
     
-    public MainThread()
+    public MainThread(ScreenCaptureGui gui)
     {
-        this.qCounter = null;
+        this.gui = gui;
         this.data = new ConcurrentLinkedQueue<PicNode>();
         this.running = false;
-        this.timer = new Timer(1, "seconds"); // sets the timer to one second per update
+        this.timer = new Timer(2, "seconds"); // sets the timer to one second per update
     }
     
     @Override
@@ -37,16 +37,13 @@ public class MainThread extends Thread
             {
                 // Reset the timer
                 timer.went();
-                // TODO: DEBUG prints out current size of the queue.
-                this.qCounter.setText("Queue Size: " + data.size());
+                // Adjust QueueSize
+                this.gui.lblQueueSize.setText("Queue Size : " + data.size());
                 // Suggest Garbage Collect
-                System.gc();
+                //System.gc();
             }
-            else
-            {
-                // Sleep For awhile
-                this.yield();
-            }
+            // Sleep For awhile
+            this.yield();
         }
         
         try 
@@ -59,14 +56,16 @@ public class MainThread extends Thread
             pw.kill();
             // Join the PictureWriterThread.
             pw.join();
-            // TODO: DEBUG prints out current size of the queue.
-            this.qCounter.setText("Queue Size: 0");
             // TODO: DEBUG prints out main thread is done.
             System.out.println("Main Thread is done.");
         } 
         catch (InterruptedException ex) 
         { 
             System.out.println("Unable to join thread.");
+        }
+        catch(Exception ex)
+        {
+            System.out.println("A problem occurred ending the thread.");
         }
     }
     
@@ -84,10 +83,5 @@ public class MainThread extends Thread
     public synchronized void kill()
     {
         this.running = false;
-    }
-    
-    public synchronized void setQCounter(JLabel qCounter)
-    {
-        this.qCounter = qCounter;
     }
 }
