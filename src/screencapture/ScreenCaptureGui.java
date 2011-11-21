@@ -38,31 +38,47 @@ public class ScreenCaptureGui extends JFrame implements ActionListener
      * @param e 
      */
     @Override
-    public void actionPerformed(ActionEvent e)
+    public synchronized void actionPerformed(ActionEvent e)
     {
         // If the record button is pressed
         if(e.getSource() == record)
         {
-            if(mt == null || !mt.isRunning())
+            if(!mt.isRunning())
             {
                 mt = new MainThread();
                 this.setTitle(title + " - Recording");
                 record.setText("STOP");
                 mt.start();
-                System.out.println("Starting the thread.");
+                // TODO: DEBUG prints out Starting MainThread
+                System.out.println("Starting the MainThread.");
             }
             else
             {
+                record.setText("WRITING DATA");
+                record.setEnabled(false);
+                this.setTitle(title + " - WRITING DATA");
+                this.paint(this.getGraphics());
+                
+                // TODO: DEBUG prints out that we are killing the main thread.
+                System.out.println("Killing Main Thread.");
+                // End the MainThread
                 mt.kill();
-                record.setText("WRITING...");
-                record.setEnabled(false);                  
-                while(mt.isAlive()){     
-                    // do nothing while we wait for thread to end.
+                try
+                {
+                    // TODO: DEBUG prints out that the main thread has been joined.
+                    System.out.println("Main Thread Joined.");
+                    mt.join();
                 }
+                catch(Exception ex)
+                { 
+                    System.out.println("Main Thread Join Failed.");
+                }
+                // TODO: DEBUG prints out when control from the thread join is handed back to the gui.
+                System.out.println("GUI MT DONE");
+                // Once the join is completed set everything back to normal.
                 record.setEnabled(true);
                 this.setTitle(title);
                 record.setText("RECORD");
-                System.out.println("Thread ended.");
             }
         }
     }

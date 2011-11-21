@@ -1,65 +1,60 @@
 package screencapture;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class MainThread extends Thread 
 {
     private boolean running;
-    private PictureTakerThread pt;
-    private PictureWriterThread pw;
     private Timer timer;
     
     public MainThread()
     {
         this.running = false;
-        this.pt = new PictureTakerThread();
-        this.pw = new PictureWriterThread();
-        this.timer = new Timer(1, "seconds"); // sets the timer to one second per update
+        this.timer = new Timer(5, "seconds"); // sets the timer to one second per update
     }
     
     @Override
     public void run()
     {
-        running = true;
+        // Create Location to hold data
+        ConcurrentLinkedQueue<PicNode> data = new ConcurrentLinkedQueue<PicNode>();
+        // Create Threads
+        PictureTakerThread pt = new PictureTakerThread(data);
+        PictureWriterThread pw = new PictureWriterThread(data);
         // Start Child Threads
         pt.start();
         pw.start();
-        // Create Location to hold data
-        ConcurrentLinkedQueue<PicNode> data;
+        // Set the running to true
+        this.running = true;
         // Start Loop
         while(running)
         {
             if(timer.isTime())
             {
-                // Get Data from the picture Taker
-                data = pt.getData();
-                pw.addData(data);
-                data.clear();
                 // Reset the timer
                 timer.went();
+                // Force Garbage Collect
+                System.gc();
             }
-            // Sleep For awhile
-            this.yield();
+            else
+            {
+                // Sleep For awhile
+                this.yield();
+            }
         }
         
         try 
         {
-            // Kill Writer Thread
+            // Kill the PictureTakerThread
             pt.kill();
-            // Join thtread
+            // Join the PictureTakerThread
             pt.join();
-            // Get final data from picture taker
-            data = pt.getData();
-            // Give Final Data to picture writer
-            pw.addData(data);
-            // Join the Picture writer thread
-            while(pw.hasData()) {this.yield();} // Wait or this thread to finish its work.
-            // Once it is done working kill the thread.
+            // Kill the PictureWriterThread
             pw.kill();
-            // Join the thread.
+            // Join the PictureWriterThread.
             pw.join();
+            // TODO: DEBUG prints out main thread is done.
+            System.out.println("Main Thread is done.");
         } 
         catch (InterruptedException ex) 
         { 

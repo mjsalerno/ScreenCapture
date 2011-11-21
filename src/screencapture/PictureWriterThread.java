@@ -1,6 +1,5 @@
 package screencapture;
 
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import javax.imageio.ImageIO;
@@ -10,52 +9,72 @@ public class PictureWriterThread extends Thread
     private ConcurrentLinkedQueue<PicNode> data; 
     private boolean running;
     
-    public PictureWriterThread()
+    /**
+     * Default Constructor
+     * Creates a new ConcurrentLinkedQueue to hold data taken from the PictureTakerThread.
+     * Sets running to true; This makes our loop in run tick.
+     */
+    public PictureWriterThread(ConcurrentLinkedQueue<PicNode> data)
     {
-        data = new ConcurrentLinkedQueue<PicNode>();
-        this.running = false;
+        this.data = data;
+        this.running = true;
     }
     
+    /**
+     * Main operation of the PictureWriterThread.
+     * Converts the data from the PictureTakerThread and turns them into images.
+     */
     @Override
     public void run()
     {
-        running = true;
-        PicNode pn;
+        // TODO: DEBUG prints out that the PictureWriterThread has started.
         System.out.println("PictureWriter has started.");
+        // Sets a node that is going to be reused many times to null.
+        PicNode pn = null;
+        while(running)
+        {
+            // Write out a file
+            write(pn);
+            // Yield the thread
+            this.yield();
+        }
+        // Write out everything left in the buffer.
+        while(!data.isEmpty())
+        {
+            write(pn);
+            this.yield();
+        }
+        // TODO: DEBUG prints out that the PictureWriterThread has ended.
+        System.out.println("PictureWriterThread has ended.");
+    }
+    
+    /**
+     * Creates a .jpg image of the next file in the ConcurrentLinkedQueue data.
+     * @param pn A PictureNode used to hold the data removed from the ConcurrentLinkedQueue.
+     */
+    private synchronized void write(PicNode pn)
+    {
         try
         {
-            while(running)
+            if(data != null && !data.isEmpty())
             {
-                if(data != null && !data.isEmpty())
-                {
-                    pn = data.remove();
-                    ImageIO.write(pn.getImage(), "jpg", new File(pn.getFilePath()));
-                }
-                else
-                {
-                    // Sleep for alittle bit
-                    this.yield();
-                }
+                pn = data.remove();
+                ImageIO.write(pn.getImage(), "jpg", new File(pn.getFilePath()));
             }
         }
         catch(Exception ex){}
     }
     
+    /**
+     * Ends the main loop in the run method.
+     */
     public synchronized void kill()
     {
         this.running = false;
     }
     
-    public synchronized void addData(ConcurrentLinkedQueue<PicNode> data)
-    {
-        while(!data.isEmpty())
-        {
-            this.data.add(data.remove());
-        }
-    }
-    
     /**
-     * @return If there is still data to be written return true. 
+     * @return If there is still data in the ConcurrentLinkedQueue return true. 
      */
     public synchronized boolean hasData()
     {
