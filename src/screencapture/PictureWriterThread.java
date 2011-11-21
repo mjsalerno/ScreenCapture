@@ -45,15 +45,17 @@ public class PictureWriterThread extends Thread
             long before = 0;
             while(running)
             {
-                //writeBinary(out, pn, before);
-                write(pn, before);
+                writeBinary(out, pn, before);
+                //out.flush();
+                //write(pn, before);
                 this.yield();
             }
             // Write out everything left in the buffer.
             while(!data.isEmpty())
             {
-                //writeBinary(out, pn, before);
-                write(pn, before);
+                writeBinary(out, pn, before);
+                out.flush();
+                //write(pn, before);
                 this.yield();
             }
             // Close the Stream

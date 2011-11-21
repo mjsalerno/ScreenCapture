@@ -40,9 +40,9 @@ public class MainThread extends Thread
                 // Adjust QueueSize
                 this.gui.lblQueueSize.setText("Queue Size : " + data.size());
                 // Suggest Garbage Collect
-                //System.gc();
+                System.gc();
             }
-            // Sleep For awhile
+            // Always sleep for awhile
             this.yield();
         }
         
