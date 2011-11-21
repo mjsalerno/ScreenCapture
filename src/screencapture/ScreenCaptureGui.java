@@ -4,6 +4,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 /**
  * @author paul
@@ -11,10 +13,14 @@ import javax.swing.JFrame;
 public class ScreenCaptureGui extends JFrame implements ActionListener 
 {
     private String title;
+    //JPanel
+    private JPanel mainPanel;
     // Threads
     private MainThread mt;
     // Buttons
     private JButton record;
+    // label
+    private JLabel label;
     
     /**
      * Complete Constructor
@@ -27,9 +33,13 @@ public class ScreenCaptureGui extends JFrame implements ActionListener
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.setSize(300, 300);
         this.setResizable(false);
+        this.mainPanel = new JPanel();
         this.record = new JButton("RECORD");
+        this.label = new JLabel("queue size");
         this.record.addActionListener(this);
-        this.add(record);
+        this.mainPanel.add(label);
+        this.mainPanel.add(record);
+        this.add(mainPanel);
         this.mt = new MainThread();
     }
     
