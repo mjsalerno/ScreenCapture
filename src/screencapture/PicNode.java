@@ -2,8 +2,8 @@ package screencapture;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import javax.imageio.ImageIO;
 
 /**
  *
@@ -30,22 +30,25 @@ public class PicNode implements Serializable
         return this.fileName;
     }
     
-    public byte[] getBytes()
+    /**
+     * Converts the BufferedImage into bytes.
+     * @return Returns the bytes of a buffered Image.
+     */
+    public byte[] getImageBytes()
     {
         byte[] buff = null;
         
         try
         {
             ByteArrayOutputStream bos = new ByteArrayOutputStream() ;
-            ObjectOutputStream out = new ObjectOutputStream(bos);
-            out.writeObject(this);
-            out.flush();
-            out.close();
+            ImageIO.write(img, "jpg", bos);
             buff = bos.toByteArray();
+            bos.flush();
+            bos.close();
         }
         catch(Exception ex)
         {
-            System.out.println("Problem Serializeing Login");
+            System.out.println("Problem Serializeing PicNode");
             ex.printStackTrace();
         }
         return buff;
