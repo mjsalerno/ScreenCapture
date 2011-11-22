@@ -1,8 +1,10 @@
 package screencapture;
 
+import java.io.BufferedOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
@@ -39,19 +41,15 @@ public class PictureWriterThread extends Thread
         
         try
         {
-            // Vars for Java.NIO
-            File outFile = new File("test.dat");
-            FileOutputStream fos = new FileOutputStream(outFile);
-            FileChannel fc = fos.getChannel();
-            ByteBuffer buffer = null;
+            // Binary Stream Data
+            File file = new File("Test.dat");
+            DataOutputStream out = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(file)));
             // TODO: DEBUG variable holds timer information.
             long before = 0;
             while(running)
             {
                 writeBinary(out, pn, before);
                 //out.flush();
-                writeBinaryData2(buffer, fc);
-                //write(pn, before);
                 this.yield();
             }
             // Write out everything left in the buffer.
@@ -59,14 +57,12 @@ public class PictureWriterThread extends Thread
             {
                 writeBinary(out, pn, before);
                 out.flush();
-                writeBinaryData2(buffer, fc);
-                //write(pn, before);
                 this.yield();
             }
             // TODO: DEBUG prints out that the PictureWriterThread has ended.
             System.out.println("PictureWriterThread has ended.");
         }
-        catch(Exception ex)
+        catch(IOException ex)
         { 
             System.out.println("Unable to create Binary stream.");
         }
@@ -93,7 +89,7 @@ public class PictureWriterThread extends Thread
      * @param out DataOutputStream to binary file.
      * @param pn PicNode containing the next image on the Queue.
      */
-    private synchronized void writeBinary(DataOutputStream out, PicNode pn, long before) throws IOException
+    private synchronized void writeBinaryData(DataOutputStream out, PicNode pn, long before) throws IOException
     {
         // New Code writes pictures to Binary file to be processed later.
         if(data != null && !data.isEmpty())
@@ -110,11 +106,23 @@ public class PictureWriterThread extends Thread
     /**
      * Uses java nio to write out binary files.
      */
-    private void writeBinaryData2(ByteBuffer buffer, FileChannel fc) throws IOException
+    private synchronized void writeBinaryData2(ByteBuffer buffer, FileChannel fc) throws IOException
     {
-        buffer.flip();
-        fc.write(buffer);
-        buffer.clear();        
+        if(data != null && !data.isEmpty())
+        {
+            buffer = ByteBuffer.wrap(data.remove().getImageBytes());
+            buffer.flip();
+            fc.write(buffer);
+            buffer.clear();
+        }
+    }
+    
+    /**
+     * Third Method using regular Java.IO to write out binary data.
+     */
+    private synchronized void writeBinaryData3(FileWriter writer)
+    {
+        
     }
     
     /**
