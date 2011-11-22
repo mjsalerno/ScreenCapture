@@ -9,11 +9,11 @@ public class MainThread extends Thread
     private Timer timer;
     // Create Location to hold data
     private ConcurrentLinkedQueue<PicNode> data;
-    private JLabel qCounter;
+    private JLabel lblQueueSize;
     
     public MainThread()
     {
-        this.qCounter = null;
+        this.lblQueueSize = null;
         this.data = new ConcurrentLinkedQueue<PicNode>();
         this.running = false;
         this.timer = new Timer(1, "seconds"); // sets the timer to one second per update
@@ -38,7 +38,7 @@ public class MainThread extends Thread
                 // Reset the timer
                 timer.went();
                 // TODO: DEBUG prints out current size of the queue.
-                this.qCounter.setText("Queue Size: " + data.size());
+                this.lblQueueSize.setText("Queue Size: " + data.size());
                 // Suggest Garbage Collect
                 System.gc();
             }
@@ -51,8 +51,6 @@ public class MainThread extends Thread
         
         try 
         {
-            // TODO: DEBUG prints out current size of the queue.
-            this.qCounter.setText("Queue Size: 0");
             // Kill the PictureTakerThread
             pt.kill();
             // Join the PictureTakerThread
@@ -86,8 +84,11 @@ public class MainThread extends Thread
         this.running = false;
     }
     
+    /**
+     * Sets lblQueueSize to the label in gui.
+     */
     public synchronized void setQCounter(JLabel qCounter)
     {
-        this.qCounter = qCounter;
+        this.lblQueueSize = qCounter;
     }
 }
