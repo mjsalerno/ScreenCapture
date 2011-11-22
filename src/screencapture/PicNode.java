@@ -24,16 +24,11 @@ public class PicNode
      */
     public byte[] getImageBytes(byte[] buff, ByteArrayOutputStream bos)
     {
-        //byte[] buff = null;
         buff = null;
-        
         try
         {
-            //ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            ImageIO.write(IMAGE, "jpg", bos);
+            ImageIO.write(IMAGE, "png", bos);
             buff = bos.toByteArray();
-            bos.flush();
-            bos.close();
         }
         catch(Exception ex)
         {

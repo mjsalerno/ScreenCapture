@@ -49,7 +49,6 @@ public class PictureWriterThread extends Thread
             byte[] buff = null;
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             
-            
             // TODO: DEBUG variable holds timer information.
             long before = 0;
             while(running)
@@ -63,6 +62,10 @@ public class PictureWriterThread extends Thread
                 writeBinaryData(out, pn, buff, bos, before);
                 this.yield();
             }
+            // Close the stream's
+            bos.flush();
+            bos.close();
+            out.close();
             // TODO: DEBUG prints out that the PictureWriterThread has ended.
             System.out.println("PictureWriterThread has ended.");
         }
@@ -103,6 +106,7 @@ public class PictureWriterThread extends Thread
             before = System.currentTimeMillis();    
             out.writeUTF(pn.FILE_NAME);
             out.write(pn.getImageBytes(buff, bos));
+            out.flush();
             System.out.println("Write DT: " + (System.currentTimeMillis() - before));
         }
     }

@@ -42,8 +42,15 @@ public class MainThread extends Thread
                 // Suggest Garbage Collect
                 System.gc();
             }
-            // Sleep For awhile
-            this.yield();
+            
+            try
+            {
+                this.sleep(1000); // Sleep For awhile
+            }
+            catch(Exception ex)
+            { 
+                System.out.println("Error sleeping.");
+            }
         }
         
         try 
