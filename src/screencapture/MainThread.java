@@ -45,7 +45,7 @@ public class MainThread extends Thread
             // Always sleep for awhile
             try
             {
-                this.sleep(1000); // Sleep For awhile
+                this.sleep(2000); // Sleep For awhile
             }
             catch(Exception ex)
             { 

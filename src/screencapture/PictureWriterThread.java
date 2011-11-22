@@ -65,7 +65,6 @@ public class PictureWriterThread extends Thread
                 this.yield();
             }
             // Close the stream's
-            bos.flush();
             bos.close();
             out.close();
             // TODO: DEBUG prints out that the PictureWriterThread has ended.
@@ -107,8 +106,7 @@ public class PictureWriterThread extends Thread
             // Debug Timing
             before = System.currentTimeMillis();    
             out.writeUTF(pn.FILE_NAME);
-            out.write(pn.getImageBytes(buff, bos));
-            out.flush();
+            //out.write(pn.getImageBytes(buff, bos));
             System.out.println("Write DT: " + (System.currentTimeMillis() - before));
         }
     }

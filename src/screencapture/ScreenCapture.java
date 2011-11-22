@@ -2,6 +2,8 @@ package screencapture;
 
 public class ScreenCapture 
 {
+    public final static long SLEEP_TIME = 200; 
+    
     /**
      * Main entrance to the program.
      * @param args 
