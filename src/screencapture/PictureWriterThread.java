@@ -1,6 +1,7 @@
 package screencapture;
 
 import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -42,19 +43,24 @@ public class PictureWriterThread extends Thread
         try
         {
             // Binary Stream Data
-            File file = new File("Test.dat");
+            File file = new File("test.dat");
             DataOutputStream out = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(file)));
+            // Byte Buffer Vars
+            byte[] buff = null;
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            
+            
             // TODO: DEBUG variable holds timer information.
             long before = 0;
             while(running)
             {
-                writeBinaryData(out, pn, before);
+                writeBinaryData(out, pn, buff, bos, before);
                 this.yield();
             }
             // Write out everything left in the buffer.
             while(!data.isEmpty())
             {
-                writeBinaryData(out, data.remove(), before);
+                writeBinaryData(out, pn, buff, bos, before);
                 this.yield();
             }
             // TODO: DEBUG prints out that the PictureWriterThread has ended.
@@ -87,7 +93,7 @@ public class PictureWriterThread extends Thread
      * @param out DataOutputStream to binary file.
      * @param pn PicNode containing the next image on the Queue.
      */
-    private synchronized void writeBinaryData(DataOutputStream out, PicNode pn, long before) throws IOException
+    private synchronized void writeBinaryData(DataOutputStream out, PicNode pn, byte[] buff, ByteArrayOutputStream bos, long before) throws IOException
     {
         // New Code writes pictures to Binary file to be processed later.
         if(data != null && !data.isEmpty())
@@ -96,31 +102,9 @@ public class PictureWriterThread extends Thread
             // Debug Timing
             before = System.currentTimeMillis();    
             out.writeUTF(pn.FILE_NAME);
-            out.write(pn.getImageBytes());
+            out.write(pn.getImageBytes(buff, bos));
             System.out.println("Write DT: " + (System.currentTimeMillis() - before));
         }
-    }
-    
-    /**
-     * Uses java nio to write out binary files.
-     */
-    private synchronized void writeBinaryData2(ByteBuffer buffer, FileChannel fc) throws IOException
-    {
-        if(data != null && !data.isEmpty())
-        {
-            buffer = ByteBuffer.wrap(data.remove().getImageBytes());
-            buffer.flip();
-            fc.write(buffer);
-            buffer.clear();
-        }
-    }
-    
-    /**
-     * Third Method using regular Java.IO to write out binary data.
-     */
-    private synchronized void writeBinaryData3(FileWriter writer)
-    {
-        
     }
     
     /**

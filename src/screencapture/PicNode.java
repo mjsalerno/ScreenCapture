@@ -22,13 +22,14 @@ public class PicNode
      * Converts the BufferedImage into bytes.
      * @return Returns the bytes of a buffered Image.
      */
-    public byte[] getImageBytes()
+    public byte[] getImageBytes(byte[] buff, ByteArrayOutputStream bos)
     {
-        byte[] buff = null;
+        //byte[] buff = null;
+        buff = null;
         
         try
         {
-            ByteArrayOutputStream bos = new ByteArrayOutputStream() ;
+            //ByteArrayOutputStream bos = new ByteArrayOutputStream();
             ImageIO.write(IMAGE, "jpg", bos);
             buff = bos.toByteArray();
             bos.flush();
