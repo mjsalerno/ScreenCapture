@@ -11,6 +11,7 @@ public class PictureTakerThread extends Thread
 {
     private ConcurrentLinkedQueue<PicNode> data; 
     private boolean running;
+    private boolean paused;
     
     /**
      * Default Constructor
@@ -21,6 +22,7 @@ public class PictureTakerThread extends Thread
     {
         this.data = data;
         this.running = true;
+        this.paused = false;
     }
     
     /**
@@ -38,7 +40,11 @@ public class PictureTakerThread extends Thread
             BufferedImage bufferedImage;
             int counter = 0;
             while(running)
-            {    
+            { 
+                while(paused){
+                    this.yield();
+                }
+                
                 // Sync Screen More For Linux/Mac
                 Toolkit.getDefaultToolkit().sync();
                 // Create a buffered image of the screen.
@@ -67,5 +73,11 @@ public class PictureTakerThread extends Thread
     public synchronized void kill()
     {
         this.running = false;
+    }
+    
+    public synchronized void pause(){        
+        this.paused = !this.paused;
+        //TODO: DEBUG - prints out if pictureTakerThread was paused
+        System.out.println("PT thread is paused: " + this.paused);
     }
 }

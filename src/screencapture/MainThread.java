@@ -10,6 +10,9 @@ public class MainThread extends Thread
     private ConcurrentLinkedQueue<PicNode> data;
     // Gui
     private ScreenCaptureGui gui;
+    //Threads
+    PictureTakerThread pt;
+    PictureWriterThread pw;
     
     public MainThread(ScreenCaptureGui gui)
     {
@@ -23,8 +26,8 @@ public class MainThread extends Thread
     public void run()
     {
         // Create Threads
-        PictureTakerThread pt = new PictureTakerThread(data);
-        PictureWriterThread pw = new PictureWriterThread(data);
+        pt = new PictureTakerThread(data);
+        pw = new PictureWriterThread(data);
         // Start Child Threads
         pt.start();
         pw.start();
@@ -83,5 +86,9 @@ public class MainThread extends Thread
     public synchronized void kill()
     {
         this.running = false;
+    }
+    
+    public synchronized void pausePictureTaker(){
+        pt.pause();
     }
 }
