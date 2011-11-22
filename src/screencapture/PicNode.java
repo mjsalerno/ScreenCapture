@@ -9,13 +9,13 @@ import javax.imageio.ImageIO;
  */
 public class PicNode
 {    
-    public final BufferedImage img;
-    public final String fileName;
+    public final BufferedImage IMAGE;
+    public final String FILE_NAME;
     
-    public PicNode(BufferedImage img, String fileName)
+    public PicNode(BufferedImage IMAGE, String FILE_NAME)
     {
-        this.img = img;
-        this.fileName = fileName;
+        this.IMAGE = IMAGE;
+        this.FILE_NAME = FILE_NAME;
     }
     
     /**
@@ -29,7 +29,7 @@ public class PicNode
         try
         {
             ByteArrayOutputStream bos = new ByteArrayOutputStream() ;
-            ImageIO.write(img, "jpg", bos);
+            ImageIO.write(IMAGE, "jpg", bos);
             buff = bos.toByteArray();
             bos.flush();
             bos.close();
