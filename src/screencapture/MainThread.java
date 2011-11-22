@@ -48,6 +48,8 @@ public class MainThread extends Thread
         
         try 
         {
+            // TODO: DEBUG prints out current size of the queue.
+            this.qCounter.setText("Queue Size: 0");
             // Kill the PictureTakerThread
             pt.kill();
             // Join the PictureTakerThread
