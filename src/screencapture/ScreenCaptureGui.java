@@ -68,6 +68,7 @@ public class ScreenCaptureGui extends JFrame implements ActionListener
                 // TODO: DEBUG prints out Starting MainThread
                 System.out.println("Starting the MainThread.");
             } else {
+                this.mt.setPictureTakerPaused(false);
                 record.setText("WRITING DATA");
                 record.setEnabled(false);
                 this.setTitle(title + " - WRITING DATA");
