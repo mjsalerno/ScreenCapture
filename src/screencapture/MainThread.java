@@ -42,11 +42,8 @@ public class MainThread extends Thread
                 // Suggest Garbage Collect
                 System.gc();
             }
-            else
-            {
-                // Sleep For awhile
-                this.yield();
-            }
+            // Sleep For awhile
+            this.yield();
         }
         
         try 

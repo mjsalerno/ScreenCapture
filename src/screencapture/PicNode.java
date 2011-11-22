@@ -5,7 +5,6 @@ import java.io.ByteArrayOutputStream;
 import javax.imageio.ImageIO;
 
 /**
- *
  * @author JJ_2011
  */
 public class PicNode
