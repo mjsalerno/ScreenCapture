@@ -9,23 +9,13 @@ import javax.imageio.ImageIO;
  */
 public class PicNode
 {    
-    private BufferedImage img;
-    private String fileName;
+    public final BufferedImage img;
+    public final String fileName;
     
     public PicNode(BufferedImage img, String fileName)
     {
         this.img = img;
         this.fileName = fileName;
-    }
-    
-    public synchronized BufferedImage getImage()
-    {
-        return this.img;
-    }
-    
-    public synchronized String getFilePath()
-    {
-        return this.fileName;
     }
     
     /**
