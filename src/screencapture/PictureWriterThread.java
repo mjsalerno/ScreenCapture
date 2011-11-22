@@ -1,10 +1,11 @@
 package screencapture;
 
-import java.io.BufferedOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import javax.imageio.ImageIO;
 
@@ -38,15 +39,18 @@ public class PictureWriterThread extends Thread
         
         try
         {
-            // Binary Stream Data
-            File file = new File("Test.dat");
-            DataOutputStream out = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(file)));
+            // Vars for Java.NIO
+            File outFile = new File("test.dat");
+            FileOutputStream fos = new FileOutputStream(outFile);
+            FileChannel fc = fos.getChannel();
+            ByteBuffer buffer = null;
             // TODO: DEBUG variable holds timer information.
             long before = 0;
             while(running)
             {
                 writeBinary(out, pn, before);
                 //out.flush();
+                writeBinaryData2(buffer, fc);
                 //write(pn, before);
                 this.yield();
             }
@@ -55,11 +59,10 @@ public class PictureWriterThread extends Thread
             {
                 writeBinary(out, pn, before);
                 out.flush();
+                writeBinaryData2(buffer, fc);
                 //write(pn, before);
                 this.yield();
             }
-            // Close the Stream
-            out.close();
             // TODO: DEBUG prints out that the PictureWriterThread has ended.
             System.out.println("PictureWriterThread has ended.");
         }
@@ -102,6 +105,16 @@ public class PictureWriterThread extends Thread
             out.write(pn.getImageBytes());
             System.out.println("Write DT: " + (System.currentTimeMillis() - before));
         }
+    }
+    
+    /**
+     * Uses java nio to write out binary files.
+     */
+    private void writeBinaryData2(ByteBuffer buffer, FileChannel fc) throws IOException
+    {
+        buffer.flip();
+        fc.write(buffer);
+        buffer.clear();        
     }
     
     /**
