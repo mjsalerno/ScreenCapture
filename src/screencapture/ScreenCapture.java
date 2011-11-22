@@ -2,7 +2,7 @@ package screencapture;
 
 public class ScreenCapture 
 {
-    public final static long SLEEP_TIME = 200; 
+    public final static long SLEEP_TIME = 150; 
     public final static int DEBUG = 0; // 0 = false; 1 = true
     
     /**

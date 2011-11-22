@@ -43,28 +43,30 @@ public class PictureWriterThread extends Thread
         try
         {
             // Binary Stream Data
-            File file = new File("test.dat");
-            DataOutputStream out = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(file)));
+            //File file = new File("test.dat");
+            //DataOutputStream out = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(file)));
             // Byte Buffer Vars
-            byte[] buff = null;
-            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            //byte[] buff = null;
+            //ByteArrayOutputStream bos = new ByteArrayOutputStream();
             
             // TODO: DEBUG variable holds timer information.
             long before = 0;
             while(running)
             {
-                writeBinaryData(out, pn, buff, bos, before);
-                try{this.sleep(ScreenCapture.SLEEP_TIME);}catch(Exception ex){System.out.println("Error Sleeping.");}
+                write(pn, before);
+                //writeBinaryData(out, pn, buff, bos, before);
+                try{this.sleep(ScreenCapture.SLEEP_TIME - 50);}catch(Exception ex){System.out.println("Error Sleeping.");}
             }
             // Write out everything left in the buffer.
             while(!data.isEmpty())
             {
-                writeBinaryData(out, pn, buff, bos, before);
-                this.yield();
+                write(pn, before);
+                //writeBinaryData(out, pn, buff, bos, before);
+                try{this.sleep(ScreenCapture.SLEEP_TIME - 50);}catch(Exception ex){System.out.println("Error Sleeping.");}
             }
             // Close the stream's
-            bos.close();
-            out.close();
+            //bos.close();
+            //out.close();
             // TODO: DEBUG prints out that the PictureWriterThread has ended.
             System.out.println("PictureWriterThread has ended.");
         }
@@ -104,7 +106,7 @@ public class PictureWriterThread extends Thread
             // Debug Timing
             before = System.currentTimeMillis();    
             out.writeUTF(pn.FILE_NAME);
-            //out.write(pn.getImageBytes(buff, bos));
+            out.write(pn.getImageBytes(buff, bos));
             System.out.println("Write DT: " + (System.currentTimeMillis() - before));
         }
     }
