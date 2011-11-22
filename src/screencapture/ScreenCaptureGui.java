@@ -19,6 +19,7 @@ public class ScreenCaptureGui extends JFrame implements ActionListener
     private JPanel mainPanel;
     // Buttons
     private JButton btnRecord;
+    private JButton pause;
     // label
     private JLabel lblQueue;
     
@@ -33,12 +34,16 @@ public class ScreenCaptureGui extends JFrame implements ActionListener
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.setSize(300, 300);
         this.setResizable(false);
+        
         this.mainPanel = new JPanel();
         this.btnRecord = new JButton("RECORD");
         this.lblQueue = new JLabel("queue size");
         this.btnRecord.addActionListener(this);
         this.mainPanel.add(lblQueue);
         this.mainPanel.add(btnRecord);
+        this.pause.addActionListener(this);
+        
+        this.mainPanel.add(pause);
         this.add(mainPanel);
         this.mt = new MainThread();
     }
@@ -48,8 +53,7 @@ public class ScreenCaptureGui extends JFrame implements ActionListener
      * @param e 
      */
     @Override
-    public synchronized void actionPerformed(ActionEvent e)
-    {
+    public synchronized void actionPerformed(ActionEvent e) {
         // If the record button is pressed
         if(e.getSource() == btnRecord)
         {
@@ -69,7 +73,7 @@ public class ScreenCaptureGui extends JFrame implements ActionListener
                 btnRecord.setEnabled(false);
                 this.setTitle(title + " - WRITING DATA");
                 this.paint(this.getGraphics());
-                
+
                 // TODO: DEBUG prints out that we are killing the main thread.
                 System.out.println("Killing Main Thread.");
                 // End the MainThread
@@ -91,6 +95,8 @@ public class ScreenCaptureGui extends JFrame implements ActionListener
                 this.setTitle(title);
                 btnRecord.setText("RECORD");
             }
+        }else if (e.getSource() == pause){
+            mt.pausePictureTaker();
         }
     }
 }

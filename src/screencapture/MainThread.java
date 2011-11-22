@@ -6,52 +6,50 @@ import javax.swing.JLabel;
 public class MainThread extends Thread 
 {
     private boolean running;
+    private Timer timer;
     // Create Location to hold data
     private ConcurrentLinkedQueue<PicNode> data;
-    private JLabel lblQueueSize;
-    // Threads
-    private PictureTakerThread pt;
-    private PictureWriterThread pw;
+    // Gui
+    private ScreenCaptureGui gui;
+    //Threads
+    PictureTakerThread pt;
+    PictureWriterThread pw;
     
-    public MainThread()
+    public MainThread(ScreenCaptureGui gui)
     {
-        this.lblQueueSize = null;
-        this.running = false;
-        // Initalize location to store data.
+        this.gui = gui;
         this.data = new ConcurrentLinkedQueue<PicNode>();
-        // Initalize Worker Threads
-        pt = new PictureTakerThread(data);
-        pt.setName("PictureTakerThread");
-        pw = new PictureWriterThread(data);
-        pw.setName("PictureWriterThread");
-        // Set this threads name
-        this.setName("Thread Manager");
+        this.running = false;
+        this.timer = new Timer(2, "seconds"); // sets the timer to one second per update
     }
     
     @Override
     public void run()
     {
-        // Set the running to true
-        this.running = true;
-        // Start Worker Threads
+        // Create Threads
+        pt = new PictureTakerThread(data);
+        pw = new PictureWriterThread(data);
+        // Start Child Threads
         pt.start();
         pw.start();
-    }
-    
-    /**
-     * Returns if the thread is running or not.
-     */
-    public synchronized boolean isRunning()
-    {
-        return this.running;
-    }
-    
-    /**
-     * Forces the thread to stop
-     */
-    public synchronized void kill()
-    {
-        this.running = false;
+        // Set the running to true
+        this.running = true;
+        // Start Loop
+        while(running)
+        {
+            if(timer.isTime())
+            {
+                // Reset the timer
+                timer.went();
+                // Adjust QueueSize
+                this.gui.lblQueueSize.setText("Queue Size : " + data.size());
+                // Suggest Garbage Collect
+                System.gc();
+            }
+            // Always sleep for awhile
+            this.yield();
+        }
+        
         try 
         {
             // Kill the PictureTakerThread
@@ -69,13 +67,29 @@ public class MainThread extends Thread
         { 
             System.out.println("Unable to join thread.");
         }
+        catch(Exception ex)
+        {
+            System.out.println("A problem occurred ending the thread.");
+        }
     }
     
     /**
-     * Sets lblQueueSize to the label in gui.
+     * Returns if the thread is running or not.
      */
-    public synchronized void setQCounter(JLabel qCounter)
+    public synchronized boolean isRunning()
     {
-        this.lblQueueSize = qCounter;
+        return this.running;
+    }
+    
+    /**
+     * Forces the thread to stop
+     */
+    public synchronized void kill()
+    {
+        this.running = false;
+    }
+    
+    public synchronized void pausePictureTaker(){
+        pt.pause();
     }
 }
