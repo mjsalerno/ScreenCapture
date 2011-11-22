@@ -55,7 +55,6 @@ public class PictureWriterThread extends Thread
             {
                 writeBinary(out, pn, before);
                 //out.flush();
-                this.yield();
             }
             // Write out everything left in the buffer.
             while(!data.isEmpty())
