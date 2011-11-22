@@ -80,7 +80,7 @@ public class PictureWriterThread extends Thread
             // Debug Timing
             before = System.currentTimeMillis();
             pn = data.remove();
-            ImageIO.write(pn.getImage(), "jpg", new File(pn.getFilePath()));
+            ImageIO.write(pn.IMAGE, "jpg", new File(pn.FILE_NAME));
             System.out.println("Write DT: " + (System.currentTimeMillis() - before));
         }
     }
@@ -98,7 +98,7 @@ public class PictureWriterThread extends Thread
             pn = data.remove();
             // Debug Timing
             before = System.currentTimeMillis();    
-            out.writeUTF(pn.getFilePath());
+            out.writeUTF(pn.FILE_NAME);
             out.write(pn.getImageBytes());
             System.out.println("Write DT: " + (System.currentTimeMillis() - before));
         }
