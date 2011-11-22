@@ -41,7 +41,7 @@ public class PictureWriterThread extends Thread
             // Binary Stream Data
             File file = new File("Test.dat");
             DataOutputStream out = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(file)));
-            // Debug
+            // TODO: DEBUG variable holds timer information.
             long before = 0;
             while(running)
             {
