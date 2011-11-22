@@ -92,4 +92,7 @@ public class MainThread extends Thread
     public synchronized void pausePictureTaker(){
         pt.pause();
     }
+    public synchronized void setPictureTakerPaused(boolean paused){
+        pt.setPause(paused);
+    }
 }

@@ -81,4 +81,8 @@ public class PictureTakerThread extends Thread
         //TODO: DEBUG - prints out if pictureTakerThread was paused
         System.out.println("PT thread is paused: " + this.paused);
     }
+
+    void setPause(boolean paused) {
+        this.paused = paused;
+    }
 }
