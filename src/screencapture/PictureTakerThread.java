@@ -40,7 +40,7 @@ public class PictureTakerThread extends Thread
             while(running)
             {    
                 // Sync Screen More For Linux/Mac
-                Toolkit.getDefaultToolkit().sync();
+                //Toolkit.getDefaultToolkit().sync();
                 // Create a buffered image of the screen.
                 bufferedImage = robot.createScreenCapture(captureSize);
                 // Add the image data to the ConcurrentLinkedQueue
@@ -51,11 +51,7 @@ public class PictureTakerThread extends Thread
                 counter++; 
                 // Sleep for a bit
                 //this.yield();
-                try
-                {
-                    this.sleep(200);
-                }
-                catch(Exception ex){}
+                try{this.sleep(ScreenCapture.SLEEP_TIME);}catch(Exception ex){System.out.println("Error Sleeping.");}
             }
             // TODO: DEBUG prints out that the PictureTakerThread has ended.
             System.out.println("PictureTakerThread has ended.");

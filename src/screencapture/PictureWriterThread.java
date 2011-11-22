@@ -54,7 +54,7 @@ public class PictureWriterThread extends Thread
             while(running)
             {
                 writeBinaryData(out, pn, buff, bos, before);
-                this.yield();
+                try{this.sleep(ScreenCapture.SLEEP_TIME);}catch(Exception ex){System.out.println("Error Sleeping.");}
             }
             // Write out everything left in the buffer.
             while(!data.isEmpty())
