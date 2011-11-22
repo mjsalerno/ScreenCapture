@@ -43,7 +43,14 @@ public class MainThread extends Thread
                 System.gc();
             }
             // Always sleep for awhile
-            this.yield();
+            try
+            {
+                this.sleep(1000); // Sleep For awhile
+            }
+            catch(Exception ex)
+            { 
+                System.out.println("Error sleeping.");
+            }
         }
         
         try 
