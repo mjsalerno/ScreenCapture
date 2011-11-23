@@ -19,9 +19,9 @@ public class ScreenCaptureGui extends JFrame implements ActionListener
     private JPanel mainPanel;
     // Buttons
     private JButton btnRecord;
-    private JButton pause;
+    private JButton btnPause;
     // label
-    private JLabel lblQueue;
+    public JLabel lblQueueSize;
     
     /**
      * Complete Constructor
@@ -37,15 +37,16 @@ public class ScreenCaptureGui extends JFrame implements ActionListener
         
         this.mainPanel = new JPanel();
         this.btnRecord = new JButton("RECORD");
-        this.lblQueue = new JLabel("queue size");
+        this.btnPause = new JButton("Pause");
+        this.lblQueueSize = new JLabel("queue size");
         this.btnRecord.addActionListener(this);
-        this.mainPanel.add(lblQueue);
+        this.mainPanel.add(lblQueueSize);
         this.mainPanel.add(btnRecord);
-        this.pause.addActionListener(this);
+        this.btnPause.addActionListener(this);
         
-        this.mainPanel.add(pause);
+        this.mainPanel.add(btnPause);
         this.add(mainPanel);
-        this.mt = new MainThread();
+        this.mt = new MainThread(this);
     }
     
     /**
@@ -59,10 +60,10 @@ public class ScreenCaptureGui extends JFrame implements ActionListener
         {
             if(!mt.isRunning())
             {
-                mt = new MainThread();
+                mt = new MainThread(this);
                 this.setTitle(title + " - Recording");
                 btnRecord.setText("STOP");
-                mt.setQCounter(lblQueue);
+                mt.setQCounter(lblQueueSize);
                 mt.start();
                 // TODO: DEBUG prints out Starting MainThread
                 System.out.println("Starting the MainThread.");
@@ -95,7 +96,7 @@ public class ScreenCaptureGui extends JFrame implements ActionListener
                 this.setTitle(title);
                 btnRecord.setText("RECORD");
             }
-        }else if (e.getSource() == pause){
+        }else if (e.getSource() == btnPause){
             mt.pausePictureTaker();
         }
     }

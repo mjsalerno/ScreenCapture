@@ -92,6 +92,12 @@ public class MainThread extends Thread
     public synchronized void pausePictureTaker(){
         pt.pause();
     }
+    
+    public synchronized void setQCounter(JLabel qCounter)
+    {
+        this.gui.lblQueueSize = qCounter;
+    }
+    
     public synchronized void setPictureTakerPaused(boolean paused){
         pt.setPause(paused);
     }
