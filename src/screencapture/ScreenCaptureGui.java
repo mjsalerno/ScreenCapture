@@ -40,12 +40,16 @@ public class ScreenCaptureGui extends JFrame implements ActionListener
         this.btnPause = new JButton("Pause");
         this.lblQueueSize = new JLabel("queue size");
         this.btnRecord.addActionListener(this);
+        
+        this.pause.addActionListener(this);
+        
         this.mainPanel.add(lblQueueSize);
         this.mainPanel.add(btnRecord);
         this.btnPause.addActionListener(this);
         
         this.mainPanel.add(btnPause);
         this.add(mainPanel);
+        
         this.mt = new MainThread(this);
     }
     
@@ -57,9 +61,7 @@ public class ScreenCaptureGui extends JFrame implements ActionListener
     public synchronized void actionPerformed(ActionEvent e) {
         // If the record button is pressed
         if(e.getSource() == btnRecord)
-        {
-            if(!mt.isRunning())
-            {
+            if (!mt.isRunning()) {
                 mt = new MainThread(this);
                 this.setTitle(title + " - Recording");
                 btnRecord.setText("STOP");
@@ -67,9 +69,8 @@ public class ScreenCaptureGui extends JFrame implements ActionListener
                 mt.start();
                 // TODO: DEBUG prints out Starting MainThread
                 System.out.println("Starting the MainThread.");
-            }
-            else
-            {
+            } else {
+                this.mt.setPictureTakerPaused(false);
                 btnRecord.setText("WRITING DATA");
                 btnRecord.setEnabled(false);
                 this.setTitle(title + " - WRITING DATA");
@@ -79,14 +80,11 @@ public class ScreenCaptureGui extends JFrame implements ActionListener
                 System.out.println("Killing Main Thread.");
                 // End the MainThread
                 mt.kill();
-                try
-                {
+                try {
                     // TODO: DEBUG prints out that the main thread has been joined.
                     System.out.println("Main Thread Joined.");
                     mt.join();
-                }
-                catch(Exception ex)
-                { 
+                } catch (Exception ex) {
                     System.out.println("Main Thread Join Failed.");
                 }
                 // TODO: DEBUG prints out when control from the thread join is handed back to the gui.
