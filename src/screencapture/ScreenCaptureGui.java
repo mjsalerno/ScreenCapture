@@ -10,8 +10,8 @@ import javax.swing.JPanel;
 /**
  * @author paul
  */
-public class ScreenCaptureGui extends JFrame implements ActionListener 
-{
+public class ScreenCaptureGui extends JFrame implements ActionListener {
+
     private String title;
     // Threads
     private MainThread mt;
@@ -22,37 +22,36 @@ public class ScreenCaptureGui extends JFrame implements ActionListener
     private JButton btnPause;
     // label
     public JLabel lblQueueSize;
-    
+
     /**
      * Complete Constructor
      * @param title Takes base title for the gui. 
      */
-    public ScreenCaptureGui(String title)
-    {
+    public ScreenCaptureGui(String title) {
         super(title);
         this.title = title;
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.setSize(300, 300);
         this.setResizable(false);
-        
+
         this.mainPanel = new JPanel();
         this.btnRecord = new JButton("RECORD");
         this.btnPause = new JButton("Pause");
         this.lblQueueSize = new JLabel("queue size");
         this.btnRecord.addActionListener(this);
-        
-        this.pause.addActionListener(this);
-        
+
+        this.btnPause.addActionListener(this);
+
         this.mainPanel.add(lblQueueSize);
         this.mainPanel.add(btnRecord);
         this.btnPause.addActionListener(this);
-        
+
         this.mainPanel.add(btnPause);
         this.add(mainPanel);
-        
+
         this.mt = new MainThread(this);
     }
-    
+
     /**
      * Checks for what actions are performed in the gui.
      * @param e 
@@ -60,7 +59,7 @@ public class ScreenCaptureGui extends JFrame implements ActionListener
     @Override
     public synchronized void actionPerformed(ActionEvent e) {
         // If the record button is pressed
-        if(e.getSource() == btnRecord)
+        if (e.getSource() == btnRecord) {
             if (!mt.isRunning()) {
                 mt = new MainThread(this);
                 this.setTitle(title + " - Recording");
@@ -94,7 +93,7 @@ public class ScreenCaptureGui extends JFrame implements ActionListener
                 this.setTitle(title);
                 btnRecord.setText("RECORD");
             }
-        }else if (e.getSource() == btnPause){
+        } else if (e.getSource() == btnPause) {
             mt.pausePictureTaker();
         }
     }
