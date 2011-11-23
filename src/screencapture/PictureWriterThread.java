@@ -53,15 +53,15 @@ public class PictureWriterThread extends Thread
             long before = 0;
             while(running)
             {
-                writeBinary(out, pn, before);
-                //out.flush();
+                write(pn, before);
+                //writeBinaryData(out, pn, buff, bos, before);
                 try{this.sleep(ScreenCapture.SLEEP_TIME - 50);}catch(Exception ex){System.out.println("Error Sleeping.");}
             }
             // Write out everything left in the buffer.
             while(!data.isEmpty())
             {
-                writeBinary(out, pn, before);
-                out.flush();
+                write(pn, before);
+                //writeBinaryData(out, pn, buff, bos, before);
                 try{this.sleep(ScreenCapture.SLEEP_TIME - 50);}catch(Exception ex){System.out.println("Error Sleeping.");}
             }
             // Close the stream's

@@ -1,22 +1,23 @@
 package screencapture;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
+import javax.swing.JLabel;
 
 public class MainThread extends Thread 
 {
     private boolean running;
     // Create Location to hold data
     private ConcurrentLinkedQueue<PicNode> data;
-    // Gui
-    private ScreenCaptureGui gui;
+    private JLabel lblQueueSize;
+    // Threads
     private PictureTakerThread pt;
     private PictureWriterThread pw;
     
-    public MainThread(ScreenCaptureGui gui)
+    public MainThread()
     {
-        this.gui = gui;
+        this.lblQueueSize = null;
         this.running = false;
-        this.timer = new Timer(2, "seconds"); // sets the timer to one second per update
+        // Initalize location to store data.
         this.data = new ConcurrentLinkedQueue<PicNode>();
         // Initalize Worker Threads
         pt = new PictureTakerThread(data);
@@ -35,10 +36,8 @@ public class MainThread extends Thread
         // Start Worker Threads
         pt.start();
         pw.start();
-                // Adjust QueueSize
-                this.gui.lblQueueSize.setText("Queue Size : " + data.size());
     }
-            // Always sleep for awhile
+    
     /**
      * Returns if the thread is running or not.
      */
@@ -69,10 +68,6 @@ public class MainThread extends Thread
         catch (InterruptedException ex) 
         { 
             System.out.println("Unable to join thread.");
-        }
-        catch(Exception ex)
-        {
-            System.out.println("A problem occurred ending the thread.");
         }
     }
     /**
