@@ -1,23 +1,34 @@
 cd src
 <<<<<<< HEAD
+<<<<<<< HEAD
 javac screencapture/*.java
 =======
 javac screencapture\*.java
 >>>>>>> added a make script for linux and windows
+=======
+javac screencapture/*.java
+>>>>>>> 56d4b0efb23d204e78ee14236692d0661ef39bf9
 echo Main-Class: screencapture.ScreenCapture > man.txt
 jar cfm ScreenCapture.jar man.txt screencapture
 rm man.txt
 cd screencapture
 rm *.class
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 56d4b0efb23d204e78ee14236692d0661ef39bf9
+cd ../..
 cp src/ScreenCapture.jar .
 rm src/ScreenCapture.jar
 chmod +x ScreenCapture.jar
 echo press any key to exit.
 read w
+<<<<<<< HEAD
 =======
 cd ..\..
 cp src\ScreenCapture.jar .
 rm src\ScreenCapture.jar
 pause
 >>>>>>> added a make script for linux and windows
+=======
+>>>>>>> 56d4b0efb23d204e78ee14236692d0661ef39bf9
