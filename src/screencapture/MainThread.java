@@ -1,21 +1,19 @@
 package screencapture;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
-import javax.swing.JLabel;
 
 public class MainThread extends Thread 
 {
-    private boolean running;
+    private volatile boolean running;
     // Create Location to hold data
     private ConcurrentLinkedQueue<PicNode> data;
-    private JLabel lblQueueSize;
     // Threads
     private PictureTakerThread pt;
     private PictureWriterThread pw;
     
     public MainThread()
     {
-        this.lblQueueSize = null;
+        // Set The running status to false
         this.running = false;
         // Initalize location to store data.
         this.data = new ConcurrentLinkedQueue<PicNode>();
@@ -33,7 +31,7 @@ public class MainThread extends Thread
     {
         // Set the running to true
         this.running = true;
-        // Start Worker Threads
+        // Start the worker threads
         pt.start();
         pw.start();
     }
@@ -47,11 +45,10 @@ public class MainThread extends Thread
     }
     
     /**
-     * Forces the thread to stop
+     * Forces the thread and all worker threads to stop.
      */
     public synchronized void kill()
     {
-        this.running = false;
         try 
         {
             // Kill the PictureTakerThread
@@ -62,6 +59,8 @@ public class MainThread extends Thread
             pw.kill();
             // Join the PictureWriterThread.
             pw.join();
+            // Set the status of the thread
+            this.running = false;
             // TODO: DEBUG prints out main thread is done.
             System.out.println("Main Thread is done.");
         } 
@@ -70,7 +69,4 @@ public class MainThread extends Thread
             System.out.println("Unable to join thread.");
         }
     }
-    /**
-     * Sets lblQueueSize to the label in gui.
-     */
 }
