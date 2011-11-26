@@ -53,7 +53,7 @@ public class PictureWriterThread extends Thread
         }
         catch(IOException ex)
         { 
-            System.out.println("Unable to create Binary stream.");
+            System.out.println("Error occurred creating the image.");
         }
     }
     
