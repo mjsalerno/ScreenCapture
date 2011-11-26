@@ -67,7 +67,7 @@ public class PictureTakerThread extends Thread
     
     /**
      * Method to sleep the thread.
-     * @param millis Contains the amount of milli seconds we want to sleep for.
+     * @param millis Contains the amount of milli-seconds we want to sleep for.
      */
     private void sleep(int millis)
     {
