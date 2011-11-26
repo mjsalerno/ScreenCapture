@@ -10,8 +10,10 @@ public class MainThread extends Thread
     // Threads
     private PictureTakerThread pt;
     private PictureWriterThread pw;
+    // Debug
+    private ScreenCaptureGui gui;
     
-    public MainThread()
+    public MainThread(ScreenCaptureGui gui)
     {
         // Set The running status to false
         this.running = false;
@@ -24,11 +26,14 @@ public class MainThread extends Thread
         pw.setName("PictureWriterThread");
         // Set this threads name
         this.setName("Thread Manager");
+        // Debug
+        this.gui = gui;
     }
     
     @Override
     public void run()
     {
+        pw.setLblQueueSize(gui.lblQueueSize);
         // Set the running to true
         this.running = true;
         // Start the worker threads

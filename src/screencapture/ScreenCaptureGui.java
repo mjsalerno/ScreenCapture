@@ -19,7 +19,7 @@ public class ScreenCaptureGui extends JFrame implements ActionListener
     // Buttons
     private JButton btnRecord;
     // label
-    private JLabel lblQueue;
+    protected JLabel lblQueueSize;
     // Gui Properties
     private String title;
     
@@ -36,9 +36,9 @@ public class ScreenCaptureGui extends JFrame implements ActionListener
         this.setResizable(false);
         this.mainPanel = new JPanel();
         this.btnRecord = new JButton("RECORD");
-        this.lblQueue = new JLabel("queue size");
+        this.lblQueueSize = new JLabel("Queue Size: 0");
         this.btnRecord.addActionListener(this);
-        this.mainPanel.add(lblQueue);
+        this.mainPanel.add(lblQueueSize);
         this.mainPanel.add(btnRecord);
         this.add(mainPanel);
         // Threads
@@ -60,7 +60,7 @@ public class ScreenCaptureGui extends JFrame implements ActionListener
             if(mt == null)
             {
                 // Create a new Thread
-                mt = new MainThread();
+                mt = new MainThread(this);
                 mt.start();
                 // Change the title and button text 
                 this.setTitle(title + " - Recording");

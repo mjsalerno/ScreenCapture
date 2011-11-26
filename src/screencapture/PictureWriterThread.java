@@ -1,14 +1,18 @@
 package screencapture;
 
+import java.awt.EventQueue;
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import javax.imageio.ImageIO;
+import javax.swing.JLabel;
 
 public class PictureWriterThread extends Thread
 {
     private ConcurrentLinkedQueue<PicNode> data; 
     private volatile boolean running;
+    // Debug Variable
+    private JLabel lblQueueSize;
     
     /**
      * Default Constructor
@@ -19,6 +23,7 @@ public class PictureWriterThread extends Thread
     {
         this.data = data;
         this.running = true;
+        this.lblQueueSize = null;
     }
     
     /**
@@ -40,12 +45,14 @@ public class PictureWriterThread extends Thread
             while(running)
             {
                 write(pn, before);
+                updateLabel();
                 sleep(0);
             }
             // Write out everything left in the buffer.
             while(!data.isEmpty())
             {
                 write(pn, before);
+                updateLabel();
                 sleep(0);
             }
             // TODO: DEBUG prints out that the PictureWriterThread has ended.
@@ -103,5 +110,32 @@ public class PictureWriterThread extends Thread
         {
             System.out.println("Error Sleeping. Thread may have been interupted.");
         }
+    }
+    
+    /**
+     * Debug method: Sets a label from the gui to be used to display the current queue size.
+     * @param lblQueueSize 
+     */
+    public void setLblQueueSize(JLabel lblQueueSize)
+    {
+        this.lblQueueSize = lblQueueSize;
+    }
+    
+    /**
+     * Debug Method to update the Current size of the Queue on the gui.
+     * @param lblQueueSize JLabel that holds the current size of the queue.
+     */
+    private void updateLabel()
+    {
+        EventQueue.invokeLater(new Runnable() 
+        {
+            public void run() 
+            {
+                if(lblQueueSize != null)
+                {
+                    lblQueueSize.setText("Queue Size: " + data.size());
+                }
+            }
+        });
     }
 }
