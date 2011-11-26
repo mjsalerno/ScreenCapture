@@ -68,7 +68,7 @@ public class PictureWriterThread extends Thread
      * Creates a .jpg image of the next file in the ConcurrentLinkedQueue data.
      * @param pn A PictureNode used to hold the data removed from the ConcurrentLinkedQueue.
      */
-    private synchronized void write(PicNode pn, long before) throws IOException
+    private void write(PicNode pn, long before) throws IOException
     {
         if(data != null && !data.isEmpty())
         {
