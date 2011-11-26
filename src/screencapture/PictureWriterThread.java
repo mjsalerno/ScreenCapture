@@ -1,21 +1,14 @@
 package screencapture;
 
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import javax.imageio.ImageIO;
 
 public class PictureWriterThread extends Thread
 {
     private ConcurrentLinkedQueue<PicNode> data; 
-    private boolean running;
+    private volatile boolean running;
     
     /**
      * Default Constructor
@@ -42,31 +35,19 @@ public class PictureWriterThread extends Thread
         
         try
         {
-            // Binary Stream Data
-            //File file = new File("test.dat");
-            //DataOutputStream out = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(file)));
-            // Byte Buffer Vars
-            //byte[] buff = null;
-            //ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            
             // TODO: DEBUG variable holds timer information.
             long before = 0;
             while(running)
             {
                 write(pn, before);
-                //writeBinaryData(out, pn, buff, bos, before);
-                try{this.sleep(ScreenCapture.SLEEP_TIME - 50);}catch(Exception ex){System.out.println("Error Sleeping.");}
+                sleep(0);
             }
             // Write out everything left in the buffer.
             while(!data.isEmpty())
             {
                 write(pn, before);
-                //writeBinaryData(out, pn, buff, bos, before);
-                try{this.sleep(ScreenCapture.SLEEP_TIME - 50);}catch(Exception ex){System.out.println("Error Sleeping.");}
+                sleep(0);
             }
-            // Close the stream's
-            //bos.close();
-            //out.close();
             // TODO: DEBUG prints out that the PictureWriterThread has ended.
             System.out.println("PictureWriterThread has ended.");
         }
@@ -93,25 +74,6 @@ public class PictureWriterThread extends Thread
     }
     
     /**
-     * Writes PicNode object out to a binary file to be manipulated later.
-     * @param out DataOutputStream to binary file.
-     * @param pn PicNode containing the next image on the Queue.
-     */
-    private synchronized void writeBinaryData(DataOutputStream out, PicNode pn, byte[] buff, ByteArrayOutputStream bos, long before) throws IOException
-    {
-        // New Code writes pictures to Binary file to be processed later.
-        if(data != null && !data.isEmpty())
-        {
-            pn = data.remove();
-            // Debug Timing
-            before = System.currentTimeMillis();    
-            out.writeUTF(pn.FILE_NAME);
-            out.write(pn.getImageBytes(buff, bos));
-            System.out.println("Write DT: " + (System.currentTimeMillis() - before));
-        }
-    }
-    
-    /**
      * Ends the main loop in the run method.
      */
     public synchronized void kill()
@@ -125,5 +87,21 @@ public class PictureWriterThread extends Thread
     public synchronized boolean hasData()
     {
         return (this.data.size() > 0 ? true : false);
+    }
+    
+    /**
+     * Method to sleep the thread.
+     * @param millis Contains the amount of milli seconds we want to sleep for.
+     */
+    private void sleep(int millis)
+    {
+        try
+        {
+            Thread.sleep(millis);
+        }
+        catch(Exception ex)
+        {
+            System.out.println("Error Sleeping. Thread may have been interupted.");
+        }
     }
 }
