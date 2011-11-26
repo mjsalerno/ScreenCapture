@@ -12,7 +12,6 @@ import javax.swing.JPanel;
  */
 public class ScreenCaptureGui extends JFrame implements ActionListener 
 {
-    private String title;
     // Threads
     private MainThread mt;
     //JPanel
@@ -21,6 +20,8 @@ public class ScreenCaptureGui extends JFrame implements ActionListener
     private JButton btnRecord;
     // label
     private JLabel lblQueue;
+    // Gui Properties
+    private String title;
     
     /**
      * Complete Constructor
@@ -29,7 +30,7 @@ public class ScreenCaptureGui extends JFrame implements ActionListener
     public ScreenCaptureGui(String title)
     {
         super(title);
-        this.title = title;
+        // Gui
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.setSize(300, 300);
         this.setResizable(false);
@@ -40,7 +41,10 @@ public class ScreenCaptureGui extends JFrame implements ActionListener
         this.mainPanel.add(lblQueue);
         this.mainPanel.add(btnRecord);
         this.add(mainPanel);
-        this.mt = new MainThread();
+        // Threads
+        this.mt = null;
+        // Properties
+        this.title = title;
     }
     
     /**
@@ -48,31 +52,36 @@ public class ScreenCaptureGui extends JFrame implements ActionListener
      * @param e 
      */
     @Override
-    public synchronized void actionPerformed(ActionEvent e)
+    public void actionPerformed(ActionEvent e)
     {
         // If the record button is pressed
         if(e.getSource() == btnRecord)
         {
-            if(!mt.isRunning())
+            if(mt == null)
             {
+                // Create a new Thread
                 mt = new MainThread();
+                mt.start();
+                // Change the title and button text 
                 this.setTitle(title + " - Recording");
                 btnRecord.setText("STOP");
-                mt.start();
                 // TODO: DEBUG prints out Starting MainThread
                 System.out.println("Starting the MainThread.");
+
             }
             else
             {
+                // Change the title and button text to indicate that work is still being done.
                 btnRecord.setText("WRITING DATA");
                 btnRecord.setEnabled(false);
                 this.setTitle(title + " - WRITING DATA");
+                // Force a repaint of gui; this.repaint() doesnt seem to work on linux.
                 this.paint(this.getGraphics());
-                
                 // TODO: DEBUG prints out that we are killing the main thread.
                 System.out.println("Killing Main Thread.");
                 // End the MainThread
                 mt.kill();
+                // Join the Main Thread
                 try
                 {
                     // TODO: DEBUG prints out that the main thread has been joined.
@@ -89,6 +98,10 @@ public class ScreenCaptureGui extends JFrame implements ActionListener
                 btnRecord.setEnabled(true);
                 this.setTitle(title);
                 btnRecord.setText("RECORD");
+                // Set MainThread to null
+                mt = null;
+                // Recomend a Garbage Collect incase things are still hanging around.
+                System.gc();
             }
         }
     }
