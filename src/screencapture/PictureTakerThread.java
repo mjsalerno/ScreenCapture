@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class PictureTakerThread extends Thread
 {
     private ConcurrentLinkedQueue<PicNode> data; 
-    private boolean running;
+    private volatile boolean running;
     
     /**
      * Default Constructor
@@ -39,19 +39,14 @@ public class PictureTakerThread extends Thread
             int counter = 0;
             while(running)
             {    
-                // Sync Screen More For Linux/Mac
-                //Toolkit.getDefaultToolkit().sync();
                 // Create a buffered image of the screen.
                 bufferedImage = robot.createScreenCapture(captureSize);
                 // Add the image data to the ConcurrentLinkedQueue
                 data.add(new PicNode(bufferedImage, counter + ".jpg"));
-                // TODO: DEBUG: print out the current image count
-                //System.out.println("Picture: " + counter);
                 // Increase the image counter.
                 counter++; 
-                // Sleep for a bit
-                //this.yield();
-                try{this.sleep(ScreenCapture.SLEEP_TIME);}catch(Exception ex){System.out.println("Error Sleeping.");}
+                // Give the cpu some time.
+                sleep(0);
             }
             // TODO: DEBUG prints out that the PictureTakerThread has ended.
             System.out.println("PictureTakerThread has ended.");
@@ -68,5 +63,21 @@ public class PictureTakerThread extends Thread
     public synchronized void kill()
     {
         this.running = false;
+    }
+    
+    /**
+     * Method to sleep the thread.
+     * @param millis Contains the amount of milli seconds we want to sleep for.
+     */
+    private void sleep(int millis)
+    {
+        try
+        {
+            Thread.sleep(ScreenCapture.SLEEP_TIME);
+        }
+        catch(Exception ex)
+        {
+            System.out.println("Error Sleeping. Thread may have been interupted.");
+        }
     }
 }

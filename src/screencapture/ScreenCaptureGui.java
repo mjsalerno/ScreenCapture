@@ -58,7 +58,6 @@ public class ScreenCaptureGui extends JFrame implements ActionListener
                 mt = new MainThread();
                 this.setTitle(title + " - Recording");
                 btnRecord.setText("STOP");
-                mt.setQCounter(lblQueue);
                 mt.start();
                 // TODO: DEBUG prints out Starting MainThread
                 System.out.println("Starting the MainThread.");
