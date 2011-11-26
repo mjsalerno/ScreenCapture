@@ -10,10 +10,6 @@ public class ScreenCapture
      */
     public static void main(String[] args) 
     {
-        /*
-        MainThread mt = new MainThread();
-        mt.start();
-         */
         ScreenCaptureGui gui = new ScreenCaptureGui("OGS");
         gui.setVisible(true); // Make the gui visible
     }
