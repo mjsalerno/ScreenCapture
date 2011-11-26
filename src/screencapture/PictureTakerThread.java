@@ -73,7 +73,7 @@ public class PictureTakerThread extends Thread
     {
         try
         {
-            Thread.sleep(ScreenCapture.SLEEP_TIME);
+            Thread.sleep(millis);
         }
         catch(Exception ex)
         {
