@@ -54,7 +54,7 @@ public class PictureTakerThread extends Thread
         catch(AWTException ex)
         { 
             System.out.println("AWT-EXCEPTION");
-        }    
+        }
     }
     
     /**

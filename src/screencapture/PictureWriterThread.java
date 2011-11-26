@@ -89,14 +89,6 @@ public class PictureWriterThread extends Thread
     }
     
     /**
-     * @return If there is still data in the ConcurrentLinkedQueue return true. 
-     */
-    public synchronized boolean hasData()
-    {
-        return (this.data.size() > 0 ? true : false);
-    }
-    
-    /**
      * Method to sleep the thread.
      * @param millis Contains the amount of milli seconds we want to sleep for.
      */
