@@ -18,7 +18,7 @@ public class MainThread extends Thread
         // Set The running status to false
         this.running = false;
         // Initalize location to store data.
-        this.data = new ConcurrentLinkedQueue<PicNode>();
+        this.data = new ConcurrentLinkedQueue<>();
         // Initalize Worker Threads
         pt = new PictureTakerThread(data);
         pt.setName("PictureTakerThread");
